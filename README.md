@@ -1,8 +1,8 @@
 # Workshop Server · 维修车间智能监控服务端（MVP）
 
-Go 单体 + SQLite（WAL）+ `go:embed` 内嵌看板页面。对接算法侧事件上报，提供实时看板和员工历史轨迹查询。
+Go 单体 + SQLite（WAL）+ `go:embed` 内嵌看板页面。对接算法侧事件上报，提供实时看板和全部人员历史观测查询。
 
-页面支持“实时看板 / 历史中心”切换及 EN / 中文切换，浏览器会记住语言选择。历史中心可按日期、员工、摄像头、区域和安全告警查询，以事件时间线展示已核实的观测轨迹，不推断跨摄像头的连续行走路线。语言回归测试：`node --test scripts/test_i18n.mjs`（使用 Node.js 内置测试工具，无额外依赖）。
+页面支持“实时看板 / 历史中心”切换及 EN / 中文切换，浏览器会记住语言选择。历史中心可按日期、人员类型、关键词、摄像头、区域和安全告警查询已识别员工、陌生人员与待识别人员；时间线只展示已上报的观测，不推断跨摄像头的连续行走路线。语言回归测试：`node --test scripts/test_i18n.mjs`（使用 Node.js 内置测试工具，无额外依赖）。
 
 ## 快速开始
 
@@ -38,9 +38,9 @@ go build -o workshop-server .
 | POST | `/api/v1/heartbeat` | 边缘设备心跳 + 摄像头状态 + 时钟偏差检测 |
 | GET | `/api/v1/dashboard` | 看板聚合（人员/车辆/车位/告警/统计） |
 | GET | `/api/v1/events` | 事件历史查询（event_type / camera_id / track_id / identity_id / 时间范围 / 分页） |
-| GET | `/api/v1/history/person-visits` | 员工历史汇总（identity_id / camera_id / area_id / alert_only / 时间范围） |
-| GET | `/api/v1/history/person-visits/{identity_id}` | 单个员工的观测时间线 |
-| POST | `/api/v1/spots/{spot_id}/override` | 车位人工修正（自动落 OPERATOR_OVERRIDE 事件） |
+| GET | `/api/v1/history/person-visits` | 人员历史汇总（identity_id / identity_status / keyword / camera_id / area_id / alert_only / 时间范围） |
+| GET | `/api/v1/history/person-visits/{key}` | 单个人员观测时间线（支持 person_key 与旧 identity_id） |
+| POST | `/api/v1/spots/{spot_id}/override` | 车位人工修正（status 与 reason_code 必填，自动落 OPERATOR_OVERRIDE 事件） |
 
 鉴权已取消：所有接口均无需 `Authorization`，旧的 `WS_TOKEN` 环境变量不再生效。能访问服务的人都可读取数据、上报事件和人工修改车位。本机使用建议设置 `WS_ADDR=127.0.0.1:8080`。本次按用户明确要求开放公网演示，所有访问者均可读写，不应存放真实人员信息或敏感截图；正式生产应另行限制访问。
 
@@ -49,7 +49,9 @@ go build -o workshop-server .
 - **事件流水 append-only**：`events` 表只插不改，`event_id` 唯一索引实现幂等，算法侧重试/补传安全
 - **在场状态纯推导**：在场人员/车辆由 ENTER/LEAVE 事件折叠得出，无冗余状态表
 - **身份三级演进**：`PERSON_ENTER(UNRESOLVED)` → `IDENTITY_UPDATE(IDENTIFIED/STRANGER)`，看板展示最新结论
+- **未知人员不误合并**：陌生人员与待识别人员按单次观测分段展示；后续识别成功时整段回填到已识别身份
 - **车位状态驱动**：`SPOT_CHANGE` 事件实时驱动 `parking_spots`，人工修正标记 `overridden`，下一条算法事件自动恢复算法驱动
+- **人工修正可审计**：修正必须传合法的 `reason_code`；`OTHER` 必须附备注，其他备注最长 200 个 Unicode 字符
 - **兜底规则**：ENTER 超 30 分钟无 LEAVE 标记 `stale`（待确认）；摄像头 60 秒无心跳判离线
 - **人脸库在算法侧**：服务端只存 `identity_id → 姓名/角色` 映射（`identities` 表），不接触人脸数据
 

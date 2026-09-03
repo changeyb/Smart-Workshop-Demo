@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+	"unicode/utf8"
 )
 
 // ── 上报报文结构（接口协议 v1.1） ──
@@ -59,6 +60,24 @@ var validTypes = map[string]bool{
 }
 
 var validSpotStatus = map[string]bool{"FREE": true, "OCCUPIED": true, "BLOCKED": true}
+
+var validOverrideReasons = map[string]map[string]bool{
+	"FREE": {
+		"VEHICLE_LEFT": true,
+		"SENSOR_ERROR": true,
+		"OTHER":        true,
+	},
+	"OCCUPIED": {
+		"VEHICLE_ARRIVED": true,
+		"SENSOR_ERROR":    true,
+		"OTHER":           true,
+	},
+	"BLOCKED": {
+		"BAY_MAINTENANCE": true,
+		"SENSOR_ERROR":    true,
+		"OTHER":           true,
+	},
+}
 
 // validate 返回错误原因，空串表示通过
 func (e *EventIn) validate() string {
@@ -236,12 +255,25 @@ func (s *Server) handleHeartbeat(w http.ResponseWriter, r *http.Request) {
 func (s *Server) handleOverride(w http.ResponseWriter, r *http.Request) {
 	spotID := r.PathValue("spot_id")
 	var in struct {
-		Status   string `json:"status"`
-		Operator string `json:"operator"`
-		Remark   string `json:"remark"`
+		Status     string `json:"status"`
+		ReasonCode string `json:"reason_code"`
+		Operator   string `json:"operator"`
+		Remark     string `json:"remark"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&in); err != nil || !validSpotStatus[in.Status] {
 		writeJSON(w, http.StatusOK, fail(40001, "invalid body or status"))
+		return
+	}
+	if !validOverrideReasons[in.Status][in.ReasonCode] {
+		writeJSON(w, http.StatusOK, fail(40001, "reason_code is required and must match status"))
+		return
+	}
+	if utf8.RuneCountInString(in.Remark) > 200 {
+		writeJSON(w, http.StatusOK, fail(40001, "remark must not exceed 200 characters"))
+		return
+	}
+	if in.ReasonCode == "OTHER" && strings.TrimSpace(in.Remark) == "" {
+		writeJSON(w, http.StatusOK, fail(40001, "remark is required when reason_code is OTHER"))
 		return
 	}
 	if in.Operator == "" {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 	"net/http"
 	"sort"
@@ -10,34 +11,42 @@ import (
 
 type historyEvent struct {
 	eventID, eventType, occurTime, cameraID, areaID string
-	trackID, identityID, behavior                   string
+	trackID, identityStatus, identityID, behavior   string
 	snapshotPath                                    string
 	time                                            time.Time
 }
 
 type historySegment struct {
-	events     []historyEvent
-	identityID string
-	hasEnter   bool
-	hasLeave   bool
+	events         []historyEvent
+	firstEventID   string
+	identityID     string
+	identityStatus string
+	hasEnter       bool
+	hasLeave       bool
 }
 
 type historyQuery struct {
-	from, to             time.Time
-	identityID, cameraID string
-	areaID               string
-	alertOnly            bool
+	from, to                     time.Time
+	identityID, identityStatus   string
+	personKey, keyword, cameraID string
+	areaID                       string
+	alertOnly                    bool
 }
 
 func parseHistoryQuery(r *http.Request) (historyQuery, string) {
 	now := time.Now()
 	q := historyQuery{
-		from:       time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()),
-		to:         now,
-		identityID: strings.TrimSpace(r.URL.Query().Get("identity_id")),
-		cameraID:   strings.TrimSpace(r.URL.Query().Get("camera_id")),
-		areaID:     strings.TrimSpace(r.URL.Query().Get("area_id")),
-		alertOnly:  r.URL.Query().Get("alert_only") == "1" || r.URL.Query().Get("alert_only") == "true",
+		from:           time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()),
+		to:             now,
+		identityID:     strings.TrimSpace(r.URL.Query().Get("identity_id")),
+		identityStatus: strings.TrimSpace(r.URL.Query().Get("identity_status")),
+		keyword:        strings.TrimSpace(r.URL.Query().Get("keyword")),
+		cameraID:       strings.TrimSpace(r.URL.Query().Get("camera_id")),
+		areaID:         strings.TrimSpace(r.URL.Query().Get("area_id")),
+		alertOnly:      r.URL.Query().Get("alert_only") == "1" || r.URL.Query().Get("alert_only") == "true",
+	}
+	if q.identityStatus != "" && q.identityStatus != "IDENTIFIED" && q.identityStatus != "STRANGER" && q.identityStatus != "UNRESOLVED" {
+		return q, "identity_status must be IDENTIFIED, STRANGER, or UNRESOLVED"
 	}
 	for _, item := range []struct {
 		name string
@@ -62,7 +71,7 @@ func parseHistoryQuery(r *http.Request) (historyQuery, string) {
 
 func (s *Server) loadHistorySegments(q historyQuery) ([]historySegment, error) {
 	rows, err := s.db.Query(`SELECT event_id, event_type, occur_time, camera_id, area_id,
-		track_id, identity_id, behavior, snapshot_path
+		track_id, identity_status, identity_id, behavior, snapshot_path
 		FROM events
 		WHERE event_type IN ('PERSON_ENTER','PERSON_LEAVE','IDENTITY_UPDATE','BEHAVIOR')
 		ORDER BY occur_time ASC, id ASC`)
@@ -75,7 +84,7 @@ func (s *Server) loadHistorySegments(q historyQuery) ([]historySegment, error) {
 	for rows.Next() {
 		var e historyEvent
 		if err := rows.Scan(&e.eventID, &e.eventType, &e.occurTime, &e.cameraID, &e.areaID,
-			&e.trackID, &e.identityID, &e.behavior, &e.snapshotPath); err != nil {
+			&e.trackID, &e.identityStatus, &e.identityID, &e.behavior, &e.snapshotPath); err != nil {
 			return nil, err
 		}
 		e.time = parseT(e.occurTime)
@@ -92,6 +101,7 @@ func (s *Server) loadHistorySegments(q historyQuery) ([]historySegment, error) {
 	segments := []historySegment{}
 	finish := func(seg *historySegment) {
 		if seg != nil && len(seg.events) > 0 {
+			seg.identityStatus = segmentIdentityStatus(seg)
 			segments = append(segments, *seg)
 		}
 	}
@@ -114,6 +124,9 @@ func (s *Server) loadHistorySegments(q historyQuery) ([]historySegment, error) {
 				active[key] = seg
 			}
 		}
+		if len(seg.events) == 0 {
+			seg.firstEventID = e.eventID
+		}
 		seg.events = append(seg.events, e)
 		if e.identityID != "" {
 			seg.identityID = e.identityID
@@ -129,7 +142,13 @@ func (s *Server) loadHistorySegments(q historyQuery) ([]historySegment, error) {
 
 	filtered := segments[:0]
 	for _, seg := range segments {
-		if seg.identityID == "" || (q.identityID != "" && seg.identityID != q.identityID) {
+		if q.identityID != "" && seg.identityID != q.identityID {
+			continue
+		}
+		if q.personKey != "" && historyPersonKey(seg) != q.personKey {
+			continue
+		}
+		if q.identityStatus != "" && seg.identityStatus != q.identityStatus {
 			continue
 		}
 		kept := seg.events[:0]
@@ -154,7 +173,33 @@ func (s *Server) loadHistorySegments(q historyQuery) ([]historySegment, error) {
 	return filtered, nil
 }
 
+func segmentIdentityStatus(seg *historySegment) string {
+	if seg.identityID != "" {
+		return "IDENTIFIED"
+	}
+	status := "UNRESOLVED"
+	for _, e := range seg.events {
+		if e.identityStatus == "STRANGER" || e.identityStatus == "UNRESOLVED" {
+			status = e.identityStatus
+		}
+	}
+	return status
+}
+
+func encodedHistoryKey(prefix, value string) string {
+	return prefix + base64.RawURLEncoding.EncodeToString([]byte(value))
+}
+
+func historyPersonKey(seg historySegment) string {
+	if seg.identityID != "" {
+		return encodedHistoryKey("id_", seg.identityID)
+	}
+	return encodedHistoryKey("obs_", seg.firstEventID)
+}
+
 type historySummary struct {
+	PersonKey          string   `json:"person_key"`
+	IdentityStatus     string   `json:"identity_status"`
 	IdentityID         string   `json:"identity_id"`
 	Name               string   `json:"name"`
 	EmployeeNo         string   `json:"employee_no"`
@@ -168,6 +213,7 @@ type historySummary struct {
 	IncompleteSegments int      `json:"incomplete_segments"`
 	Cameras            []string `json:"cameras"`
 	Areas              []string `json:"areas"`
+	TrackIDs           []string `json:"track_ids"`
 }
 
 func (s *Server) summarizeHistory(segments []historySegment) ([]historySummary, error) {
@@ -192,19 +238,20 @@ func (s *Server) summarizeHistory(segments []historySegment) ([]historySummary, 
 
 	type accumulator struct {
 		historySummary
-		first, last    time.Time
-		cameras, areas map[string]bool
+		first, last              time.Time
+		cameras, areas, trackIDs map[string]bool
 	}
 	byID := map[string]*accumulator{}
 	for _, seg := range segments {
-		a := byID[seg.identityID]
+		personKey := historyPersonKey(seg)
+		a := byID[personKey]
 		if a == nil {
 			info := identities[seg.identityID]
 			a = &accumulator{
-				historySummary: historySummary{IdentityID: seg.identityID, Name: info.name, EmployeeNo: info.employeeNo, Role: info.role},
-				cameras:        map[string]bool{}, areas: map[string]bool{},
+				historySummary: historySummary{PersonKey: personKey, IdentityStatus: seg.identityStatus, IdentityID: seg.identityID, Name: info.name, EmployeeNo: info.employeeNo, Role: info.role},
+				cameras:        map[string]bool{}, areas: map[string]bool{}, trackIDs: map[string]bool{},
 			}
-			byID[seg.identityID] = a
+			byID[personKey] = a
 		}
 		a.SegmentCount++
 		if !seg.hasEnter || !seg.hasLeave {
@@ -231,6 +278,9 @@ func (s *Server) summarizeHistory(segments []historySegment) ([]historySummary, 
 			if e.areaID != "" {
 				a.areas[e.areaID] = true
 			}
+			if e.trackID != "" {
+				a.trackIDs[e.trackID] = true
+			}
 		}
 	}
 
@@ -243,12 +293,39 @@ func (s *Server) summarizeHistory(segments []historySegment) ([]historySummary, 
 		for v := range a.areas {
 			a.Areas = append(a.Areas, v)
 		}
+		for v := range a.trackIDs {
+			a.TrackIDs = append(a.TrackIDs, v)
+		}
 		sort.Strings(a.Cameras)
 		sort.Strings(a.Areas)
+		sort.Strings(a.TrackIDs)
 		out = append(out, a.historySummary)
 	}
 	sort.Slice(out, func(i, j int) bool { return parseT(out[i].LastSeen).After(parseT(out[j].LastSeen)) })
 	return out, nil
+}
+
+func filterHistoryKeyword(items []historySummary, keyword string) []historySummary {
+	keyword = strings.ToLower(strings.TrimSpace(keyword))
+	if keyword == "" {
+		return items
+	}
+	kept := items[:0]
+	for _, item := range items {
+		values := []string{item.Name, item.EmployeeNo, item.IdentityID}
+		values = append(values, item.TrackIDs...)
+		matched := false
+		for _, value := range values {
+			if strings.Contains(strings.ToLower(value), keyword) {
+				matched = true
+				break
+			}
+		}
+		if matched {
+			kept = append(kept, item)
+		}
+	}
+	return kept
 }
 
 func (s *Server) historyFilterMeta() map[string]any {
@@ -302,6 +379,7 @@ func (s *Server) handlePersonHistory(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusOK, fail(50000, err.Error()))
 		return
 	}
+	summaries = filterHistoryKeyword(summaries, q.keyword)
 	if q.alertOnly {
 		kept := summaries[:0]
 		for _, item := range summaries {
@@ -323,10 +401,25 @@ func (s *Server) handlePersonHistoryDetail(w http.ResponseWriter, r *http.Reques
 		writeJSON(w, http.StatusOK, fail(40001, reason))
 		return
 	}
-	q.identityID = r.PathValue("identity_id")
-	if q.identityID == "" {
-		writeJSON(w, http.StatusOK, fail(40001, "missing identity_id"))
+	key := r.PathValue("key")
+	if key == "" {
+		writeJSON(w, http.StatusOK, fail(40001, "missing person key"))
 		return
+	}
+	if strings.HasPrefix(key, "id_") || strings.HasPrefix(key, "obs_") {
+		prefix, encoded := key[:3], key[3:]
+		decoded, err := base64.RawURLEncoding.DecodeString(encoded)
+		if err != nil || len(decoded) == 0 {
+			writeJSON(w, http.StatusOK, fail(40001, "invalid person key"))
+			return
+		}
+		if prefix == "id_" {
+			q.identityID = string(decoded)
+		} else {
+			q.personKey = key
+		}
+	} else {
+		q.identityID = key
 	}
 	segments, err := s.loadHistorySegments(q)
 	if err != nil {
@@ -348,6 +441,7 @@ func (s *Server) handlePersonHistoryDetail(w http.ResponseWriter, r *http.Reques
 			nodes = append(nodes, map[string]any{
 				"event_id": e.eventID, "event_type": e.eventType, "occur_time": e.occurTime,
 				"camera_id": e.cameraID, "area_id": e.areaID, "track_id": e.trackID,
+				"identity_status": nilIfEmpty(e.identityStatus), "identity_id": nilIfEmpty(e.identityID),
 				"behavior": nilIfEmpty(e.behavior), "snapshot_url": nilIfEmpty(e.snapshotPath),
 			})
 		}

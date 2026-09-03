@@ -63,9 +63,9 @@ func (s *Server) loadCameras(now time.Time) []map[string]any {
 }
 
 type presence struct {
-	enterTS   string
-	idStatus  string // ENTER 事件自带的身份结论
-	idID      string
+	enterTS  string
+	idStatus string // ENTER 事件自带的身份结论
+	idID     string
 }
 
 // foldPresence 把 ENTER/LEAVE 事件折叠为"当前在场"集合，保留 ENTER 携带的身份信息
@@ -211,7 +211,7 @@ func (s *Server) loadVehiclesPresent(now time.Time) []map[string]any {
 }
 
 func (s *Server) loadSpots(now time.Time) []map[string]any {
-	rows, err := s.db.Query(`SELECT spot_id, zone, status, plate_no, since, overridden, target_minutes
+	rows, err := s.db.Query(`SELECT spot_id, zone, status, plate_no, since, overridden, target_minutes, updated_at
 		FROM parking_spots ORDER BY spot_id`)
 	if err != nil {
 		return nil
@@ -219,9 +219,9 @@ func (s *Server) loadSpots(now time.Time) []map[string]any {
 	defer rows.Close()
 	out := []map[string]any{}
 	for rows.Next() {
-		var id, zone, status, plate, since string
+		var id, zone, status, plate, since, updatedAt string
 		var ovr, target int
-		if rows.Scan(&id, &zone, &status, &plate, &since, &ovr, &target) != nil {
+		if rows.Scan(&id, &zone, &status, &plate, &since, &ovr, &target, &updatedAt) != nil {
 			continue
 		}
 		var elapsed int64
@@ -234,7 +234,7 @@ func (s *Server) loadSpots(now time.Time) []map[string]any {
 		out = append(out, map[string]any{
 			"spot_id": id, "zone": zone, "status": status,
 			"plate_no": nilIfEmpty(plate), "since": nilIfEmpty(since),
-			"elapsed_sec": elapsed,
+			"updated_at": nilIfEmpty(updatedAt), "elapsed_sec": elapsed,
 			"over_target": status == "OCCUPIED" && target > 0 && elapsed > int64(target)*60,
 			"overridden":  ovr == 1,
 		})

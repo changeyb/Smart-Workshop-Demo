@@ -150,7 +150,7 @@ request POST /api/v1/events "[
 ]"
 echo; echo "==> 5. 人工修正 A-05 为 FREE"
 request POST /api/v1/spots/A-05/override \
-  '{"status":"FREE","operator":"admin","remark":"锥桶误识别"}'
+  '{"status":"FREE","reason_code":"SENSOR_ERROR","operator":"admin","remark":"锥桶误识别"}'
 echo; echo "==> 6. 拉取看板数据（截取 stats）"
 request GET /api/v1/dashboard
 echo "完成。打开 $HOST 查看看板。"

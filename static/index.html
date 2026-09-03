@@ -6,9 +6,9 @@
 <title>Workshop OS · Owner's Desk</title>
 <style>
 :root{
-  --bg:#E8EDF3; --card:#FFFFFF; --ink:#142033; --mid:#46566C; --faint:#617086;
+  --bg:#E8EDF3; --card:#FFFFFF; --ink:#172235; --mid:#35445A; --faint:#526177;
   --green:#087647; --green-soft:#E4F4EC; --gold:#9A5B00; --gold-soft:#FFF0D4;
-  --red:#B42318; --red-soft:#FDE9E7; --blue:#2459B8; --blue-soft:#E7EFFD; --line:#CBD4DF;
+  --red:#B42318; --red-soft:#FDE9E7; --blue:#2459B8; --blue-soft:#E7EFFD; --line:#B8C3D1;
   --mono:'SFMono-Regular','Roboto Mono','PingFang SC','Microsoft YaHei',monospace;
   --sans:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;
   --r:14px;
@@ -25,7 +25,7 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 .logo small{display:block;font-size:12px;color:var(--mid);font-weight:650;letter-spacing:.04em}
 .hr{flex:1}
 .lang{display:flex;background:#D5DDE7;border-radius:99px;padding:3px;flex:none}
-.lang button{border:0;background:transparent;color:#33445B;padding:6px 14px;border-radius:99px;
+.lang button{border:0;background:transparent;color:var(--mid);padding:6px 14px;border-radius:99px;
   font:700 13px var(--sans);cursor:pointer}
 .lang button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
 .lang button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -35,9 +35,9 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 .livechip.err{color:var(--red);background:var(--red-soft)}
 .livechip.err i{background:var(--red)}
 @keyframes p{50%{opacity:.3}}
-.clockbox{font-family:var(--mono);font-size:14px;color:#34445B;font-weight:700}
+.clockbox{font-family:var(--mono);font-size:14px;color:var(--mid);font-weight:700}
 .view-nav{display:flex;gap:4px;width:max-content;margin:0 0 18px;padding:4px;background:#D5DDE7;border-radius:10px}
-.view-nav button{border:0;background:transparent;color:#40516A;padding:8px 16px;border-radius:7px;
+.view-nav button{border:0;background:transparent;color:var(--mid);padding:8px 16px;border-radius:7px;
   font:750 14px var(--sans);cursor:pointer}
 .view-nav button[aria-selected="true"]{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(28,47,72,.14)}
 .view-nav button:focus-visible,.history-filters button:focus-visible,.history-person:focus-visible,
@@ -46,12 +46,13 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 
 .kpis{display:grid;grid-template-columns:1.35fr 1fr 1fr 1fr;gap:15px}
 .kpi{background:var(--card);border-radius:var(--r);padding:21px 22px;border:1px solid var(--line);border-top:5px solid #7C8DA3}
-.kpi .cap{font-size:13px;color:#42536A;font-weight:750}
+.kpi .cap{font-size:13px;color:var(--mid);font-weight:750}
 .kpi .big{font-size:34px;font-weight:850;letter-spacing:-.03em;margin-top:7px;font-variant-numeric:tabular-nums;line-height:1.2}
 .kpi .big small{font-size:16px;color:var(--mid);font-weight:700}
 .kpi .sub{font-size:13px;margin-top:8px;font-weight:700}
 .kpi.money{background:#16243A;color:#F7FAFC;border-color:#16243A;border-top-color:#5E91F2}
 .kpi.money .cap{color:#C6D1DF}
+.kpi.money .big small{color:#C6D1DF}
 .kpi.money .sub{color:#9DDBBA}
 .kpi:nth-child(2){border-top-color:var(--blue);background:#F7F9FE}
 .kpi:nth-child(3){border-top-color:var(--gold);background:#FFFBF2}
@@ -67,35 +68,40 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 .section-devices{background:#EEF8F3;border-top:5px solid var(--green)}
 .sec-h{display:flex;align-items:center;gap:12px;margin:0 2px 15px}
 .sec-h h2{font-size:20px;line-height:1.25;font-weight:850;letter-spacing:-.015em}
-.sec-h .zh{font-size:13px;color:#506078;font-weight:650}
-.sec-h .cnt{font-size:12px;font-weight:800;color:#31445E;background:#fff;border:1px solid #BEC9D6;
+.sec-h .zh{font-size:13px;color:var(--faint);font-weight:650}
+.sec-h .cnt{font-size:12px;font-weight:800;color:var(--mid);background:#fff;border:1px solid #BEC9D6;
   border-radius:99px;padding:3px 11px}
 .sec-h .sp{flex:1}
 
 .bays{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
 .bay{background:var(--card);border:1px solid #BCC8D6;border-radius:12px;padding:15px;
-  min-height:126px;display:flex;flex-direction:column;position:relative;cursor:pointer;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
+  min-height:152px;display:flex;flex-direction:column;position:relative;transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease}
 .bay:hover{transform:translateY(-2px);border-color:#7D91AB;box-shadow:0 8px 16px rgba(36,62,92,.10)}
 .bay:active{transform:translateY(0)}
-.bay .bid{font-size:12px;font-weight:800;color:#52627A;letter-spacing:.05em}
+.bay .bid{font-size:12px;font-weight:800;color:var(--faint);letter-spacing:.05em}
 .bay .plate{font-weight:850;font-size:17px;margin-top:auto;letter-spacing:.01em}
 .bay .timer{font-family:var(--mono);font-size:13px;font-weight:800;margin-top:3px}
 .bay .st{font-size:12px;margin-top:4px;display:flex;align-items:center;gap:6px;font-weight:750}
 .bay .st i{width:7px;height:7px;border-radius:50%}
 .bay.free{background:#F9FBFD;border-style:dashed;border-color:#9EACBC}
-.bay.free .plate{color:#4F6076;font-weight:700;font-size:15px}
+.bay.free .plate{color:var(--faint);font-weight:700;font-size:15px}
 .bay.free .st{color:var(--green)} .bay.free .st i{background:var(--green)}
 .bay.busy .st{color:var(--blue)} .bay.busy .st i{background:var(--blue)}
 .bay.busy .timer{color:var(--blue)}
 .bay.over{border-color:#EFC892;background:var(--gold-soft)}
 .bay.over .st{color:var(--gold)} .bay.over .st i{background:var(--gold)}
 .bay.over .timer{color:var(--gold)}
-.bay.over::after{content:attr(data-over-label);position:absolute;top:11px;right:11px;font-size:8.5px;
+.bay.over::after{content:attr(data-over-label);position:absolute;top:11px;right:11px;font-size:12px;
   font-weight:800;letter-spacing:.08em;color:var(--gold)}
 .bay.blk{background:var(--red-soft);border-color:#E4A49E}
 .bay.blk .st{color:var(--red)} .bay.blk .st i{background:var(--red)}
 .bay.blk .plate{font-size:14px;color:var(--red);font-weight:750}
-.bay .ovr{position:absolute;bottom:11px;right:12px;font-size:10px;color:#53637A;font-weight:700}
+.bay .ovr{font-size:12px;color:var(--faint);font-weight:700}
+.bay-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+.bay-adjust{border:1px solid #8FA1B7;border-radius:7px;background:#fff;color:var(--ink);padding:5px 10px;
+  font:750 12px var(--sans);cursor:pointer;margin-left:auto}
+.bay-adjust:hover{background:var(--blue-soft);border-color:var(--blue)}
+.bay-adjust:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
 .cols{display:grid;grid-template-columns:1.15fr .85fr;gap:15px;align-items:start}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 7px 22px rgba(35,55,80,.06)}
@@ -103,7 +109,7 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 .card.alert-card{border-top:5px solid var(--red)}
 .card .c-head{display:flex;align-items:center;justify-content:space-between;padding:17px 20px 13px;background:#F8FAFC}
 .card .c-head b{font-size:17px;font-weight:850}
-.card .c-head span{font-size:12px;color:#53637A;font-weight:700}
+.card .c-head span{font-size:12px;color:var(--faint);font-weight:700}
 
 .staff{display:flex;align-items:center;gap:13px;padding:12px 20px;border-top:1px solid #E1E6ED}
 .avatar{width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
@@ -111,11 +117,11 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 .staff.stranger .avatar{background:var(--red-soft);color:var(--red)}
 .staff.unresolved .avatar{background:#EEF0EC;color:var(--mid)}
 .staff .who b{font-size:15px;display:flex;align-items:center;gap:8px}
-.staff .who span{font-size:12px;color:#53637A}
+.staff .who span{font-size:12px;color:var(--faint)}
 .staff .right{margin-left:auto;text-align:right}
 .staff .dur{font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
-.staff .dur small{display:block;font-size:11px;color:#53637A;font-weight:650}
-.role{font-size:10px;font-weight:700;border-radius:99px;padding:2px 8px;background:#EFF1ED;color:var(--mid)}
+.staff .dur small{display:block;font-size:12px;color:var(--faint);font-weight:650}
+.role{font-size:12px;font-weight:700;border-radius:99px;padding:2px 8px;background:#EFF1ED;color:var(--mid)}
 .role.warn{background:var(--red-soft);color:var(--red)}
 .role.pend{background:var(--gold-soft);color:var(--gold)}
 
@@ -123,9 +129,9 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 .alert .dot{flex:none;width:8px;height:8px;border-radius:50%;margin-top:6px;background:var(--gold)}
 .alert.l2 .dot{background:var(--red);box-shadow:0 0 0 3px rgba(210,59,47,.15)}
 .alert .body b{font-size:14px;display:block;font-weight:800}
-.alert .body span{font-size:12px;color:#53637A}
+.alert .body span{font-size:12px;color:var(--faint)}
 .alert .side{margin-left:auto;text-align:right;flex:none}
-.alert .tm{font-size:12px;color:#53637A;font-weight:650;font-variant-numeric:tabular-nums}
+.alert .tm{font-size:12px;color:var(--faint);font-weight:650;font-variant-numeric:tabular-nums}
 .alert.l2 b{color:var(--red)}
 
 .vehs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -133,10 +139,10 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 .veh .top{display:flex;align-items:center;gap:10px}
 .veh .vplate{font-weight:850;font-size:19px;letter-spacing:.02em}
 .veh .vplate.none{color:var(--gold);font-size:12.5px}
-.veh .eta{margin-left:auto;font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:99px;padding:3px 9px}
+.veh .eta{margin-left:auto;font-size:12px;font-weight:800;letter-spacing:.06em;border-radius:99px;padding:3px 9px}
 .eta.ok{background:var(--green-soft);color:var(--green)}
 .eta.soon{background:var(--gold-soft);color:var(--gold)}
-.veh .vmeta{display:flex;justify-content:space-between;margin-top:11px;font-size:12px;color:#53637A}
+.veh .vmeta{display:flex;justify-content:space-between;margin-top:11px;font-size:12px;color:var(--faint)}
 .veh .vmeta b{display:block;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:800}
 
 .cams{display:flex;gap:10px;flex-wrap:wrap}
@@ -144,61 +150,81 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
   border-radius:99px;padding:9px 16px;font-size:13px;font-weight:750}
 .camchip i{width:8px;height:8px;border-radius:50%;background:var(--green)}
 .camchip.off{color:var(--red)} .camchip.off i{background:var(--red)}
-.camchip small{color:#4C5F56;font-weight:650}
+.camchip small{color:var(--faint);font-size:12px;font-weight:650}
 
 .history-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:4px 2px 16px}
 .history-head h1{font-size:26px;line-height:1.2;letter-spacing:-.025em}
-.history-head p{color:#53637A;font-size:13px;margin-top:4px}
+.history-head p{color:var(--faint);font-size:13px;margin-top:4px}
 .history-filters{display:grid;grid-template-columns:1fr 1fr 1.25fr 1fr 1fr auto;gap:12px;align-items:end;
   background:#F7F9FC;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:var(--r);padding:18px 20px}
 .filter-field{display:flex;flex-direction:column;gap:5px;min-width:0}
-.filter-field label,.check-field{font-size:12px;color:#475970;font-weight:750}
+.filter-field label,.check-field{font-size:12px;color:var(--mid);font-weight:750}
 .filter-field input,.filter-field select{width:100%;height:40px;border:1px solid #B7C3D1;border-radius:8px;background:#fff;
   color:var(--ink);font:650 13px var(--sans);padding:0 10px}
 .check-field{height:40px;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .check-field input{width:17px;height:17px;accent-color:var(--blue)}
 .filter-actions{display:flex;gap:8px;grid-column:1/-1;justify-content:flex-end}
 .history-filters button{height:40px;border-radius:8px;padding:0 15px;border:1px solid #AEBBCB;background:#fff;
-  color:#31445E;font:750 13px var(--sans);cursor:pointer;white-space:nowrap}
+  color:var(--mid);font:750 13px var(--sans);cursor:pointer;white-space:nowrap}
 .history-filters button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
 .history-grid{display:grid;grid-template-columns:minmax(300px,.75fr) minmax(0,1.25fr);gap:15px;margin-top:15px;align-items:start}
 .history-panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 7px 22px rgba(35,55,80,.06)}
 .history-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;background:#F8FAFC;border-bottom:1px solid #DDE4EC}
-.history-panel-head b{font-size:15px}.history-panel-head span{font-size:12px;color:#53637A;font-weight:650}
+.history-panel-head b{font-size:15px}.history-panel-head span{font-size:12px;color:var(--faint);font-weight:650}
 .history-list{max-height:620px;overflow:auto}
 .history-person{display:block;width:100%;border:0;border-bottom:1px solid #E1E6ED;background:#fff;text-align:left;
   padding:15px 18px;cursor:pointer;color:var(--ink);font-family:var(--sans)}
 .history-person:last-child{border-bottom:0}.history-person:hover{background:#F5F8FC}
 .history-person.active{background:var(--blue-soft);box-shadow:inset 4px 0 0 var(--blue)}
 .history-person .person-top{display:flex;align-items:center;gap:8px}.history-person .person-top b{font-size:14px}
-.history-person .person-top span{margin-left:auto;color:#52637A;font:650 11px var(--mono)}
-.history-person .person-no{font-size:11px;color:#617086;margin-top:2px}
-.history-person .person-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:9px;color:#42536A;font-size:11px;font-weight:650}
+.history-person .person-top span{margin-left:auto;color:var(--faint);font:650 12px var(--mono)}
+.history-person .person-no{font-size:12px;color:var(--faint);margin-top:2px}
+.history-person .person-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:9px;color:var(--mid);font-size:12px;font-weight:650}
 .history-person .alert-count{color:var(--red)}
 .history-detail{min-height:430px}
 .history-identity{padding:18px 20px 15px;border-bottom:1px solid #E1E6ED}
-.history-identity h2{font-size:19px}.history-identity p{font-size:12px;color:#52637A;margin-top:2px}
+.history-identity h2{font-size:19px}.history-identity p{font-size:12px;color:var(--faint);margin-top:2px}
 .history-stats{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
-.history-stats div{font-size:11px;color:#617086}.history-stats b{display:block;color:var(--ink);font-size:14px}
+.history-stats div{font-size:12px;color:var(--faint)}.history-stats b{display:block;color:var(--ink);font-size:14px}
 .timeline{padding:6px 20px 22px}
 .timeline-node{display:grid;grid-template-columns:54px 14px minmax(0,1fr);gap:10px;position:relative;padding-top:16px}
 .timeline-node::after{content:"";position:absolute;left:74px;top:31px;bottom:-17px;width:2px;background:#D6DEE8}
 .timeline-node:last-child::after{display:none}
-.timeline-time{font:700 12px var(--mono);color:#4B5C72;padding-top:1px}
+.timeline-time{font:700 12px var(--mono);color:var(--faint);padding-top:1px}
 .timeline-mark{width:10px;height:10px;border-radius:50%;background:var(--blue);margin-top:4px;z-index:1;box-shadow:0 0 0 3px #fff}
 .timeline-node.alert-node .timeline-mark{background:var(--red)}
-.timeline-content b{font-size:13px}.timeline-content p{font-size:11px;color:#5A6A7F;margin-top:2px}
-.snapshot-link{display:inline-block;margin-top:5px;color:var(--blue);font-size:11px;font-weight:750;text-decoration:none}
+.timeline-content b{font-size:13px}.timeline-content p{font-size:12px;color:var(--faint);margin-top:2px}
+.snapshot-link{display:inline-block;margin-top:5px;color:var(--blue);font-size:12px;font-weight:750;text-decoration:none}
 .history-note{margin:15px 20px 0;padding:10px 12px;border-radius:8px;background:var(--gold-soft);color:#714500;font-size:12px;font-weight:650}
-.history-state{padding:48px 20px;text-align:center;color:#56667C;font-size:13px}
+.history-state{padding:48px 20px;text-align:center;color:var(--faint);font-size:13px}
 
-.empty{padding:28px 20px;text-align:center;color:#56667C;font-size:14px;font-weight:650;
+.empty{padding:28px 20px;text-align:center;color:var(--faint);font-size:14px;font-weight:650;
   border-top:1px solid #F0F1EE}
 
-footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px;color:#46566C}
+footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mid)}
 .pdpa{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);
   border-radius:99px;padding:6px 13px;font-weight:600}
 .pdpa i{width:7px;height:7px;border-radius:50%;background:var(--green)}
+
+.drawer-backdrop{position:fixed;inset:0;background:rgba(20,32,51,.48);z-index:20}
+.spot-drawer{position:fixed;z-index:21;top:0;right:0;width:min(430px,100%);height:100%;background:#fff;
+  box-shadow:-14px 0 38px rgba(20,32,51,.2);padding:24px;overflow:auto;transform:translateX(100%);transition:transform .2s ease}
+.spot-drawer.open{transform:translateX(0)}
+.drawer-head{display:flex;align-items:flex-start;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.drawer-head h2{font-size:20px}.drawer-head p{font-size:13px;color:var(--faint);margin-top:2px}.drawer-head button{margin-left:auto}
+.icon-button{width:38px;height:38px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font-size:20px;cursor:pointer}
+.spot-facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.spot-fact{border:1px solid var(--line);border-radius:9px;padding:10px 12px}.spot-fact span{display:block;color:var(--faint);font-size:12px;font-weight:700}.spot-fact b{font-size:15px}
+.override-form fieldset{border:0;margin:0 0 18px}.override-form legend,.override-form label{font-size:13px;font-weight:800;color:var(--mid);margin-bottom:7px;display:block}
+.status-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.status-option{position:relative}.status-option input{position:absolute;opacity:0}
+.status-option span{display:block;border:1px solid #98A8BC;border-radius:8px;padding:9px 5px;text-align:center;font-size:13px;font-weight:750;cursor:pointer}
+.status-option input:checked+span{border-color:var(--blue);background:var(--blue-soft);color:var(--blue)}.status-option input:disabled+span{opacity:.5;cursor:not-allowed}
+.override-form select,.override-form textarea{width:100%;border:1px solid #98A8BC;border-radius:8px;background:#fff;color:var(--ink);font:650 14px var(--sans);padding:9px 10px}
+.override-form textarea{min-height:78px;resize:vertical}.override-summary{border-radius:8px;background:#F2F5F9;padding:11px 12px;color:var(--mid);font-size:13px;font-weight:700}
+.override-warning{margin-top:10px;color:#714500;background:var(--gold-soft);border-radius:8px;padding:10px 12px;font-size:12px;font-weight:700}
+.form-error{min-height:20px;margin-top:10px;color:var(--red);font-size:13px;font-weight:750}.drawer-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:14px}
+.drawer-actions button{border:1px solid #98A8BC;border-radius:8px;background:#fff;color:var(--ink);padding:9px 15px;font:750 13px var(--sans);cursor:pointer}.drawer-actions .primary{background:var(--blue);border-color:var(--blue);color:#fff}.drawer-actions button:disabled{opacity:.55;cursor:not-allowed}
+.drawer-actions button:focus-visible,.icon-button:focus-visible,.override-form select:focus-visible,.override-form textarea:focus-visible,.status-option input:focus-visible+span{outline:2px solid var(--blue);outline-offset:2px}
 
 @media(max-width:960px){
   .kpis{grid-template-columns:repeat(2,1fr)}
@@ -219,6 +245,8 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
   .filter-actions{grid-column:1/-1}.filter-actions button{flex:1}
   .history-grid{grid-template-columns:1fr}
   .history-list{max-height:none}
+  .spot-drawer{top:auto;bottom:0;width:100%;height:auto;max-height:92%;border-radius:18px 18px 0 0;transform:translateY(100%);padding:20px 16px}
+  .spot-drawer.open{transform:translateY(0)}
 }
 </style>
 </head>
@@ -268,7 +296,7 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
 </div>
 
 <div class="sec section-block section-bays">
-  <div class="sec-h"><h2 data-i18n="baysTitle">Workshop Bays</h2><span class="zh" data-i18n="bayHint">Click a bay to override</span>
+  <div class="sec-h"><h2 data-i18n="baysTitle">Workshop Bays</h2><span class="zh" data-i18n="bayHint">Use Adjust to correct a bay</span>
     <span class="cnt" id="bay-cnt"></span><span class="sp"></span></div>
   <div class="bays" id="bays"></div>
 </div>
@@ -299,12 +327,13 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
 
 <main id="history-view" hidden>
   <div class="history-head">
-    <div><h1 data-i18n="staffHistory">Staff history</h1><p data-i18n="historyScope">Verified camera and area observations, without inferred walking routes.</p></div>
+    <div><h1 data-i18n="peopleHistory">People history</h1><p data-i18n="historyScope">All reported people observations, without inferred walking routes.</p></div>
   </div>
   <form class="history-filters" id="history-form">
     <div class="filter-field"><label for="history-from" data-i18n="fromDate">From date</label><input id="history-from" type="date" required></div>
     <div class="filter-field"><label for="history-to" data-i18n="toDate">To date</label><input id="history-to" type="date" required></div>
-    <div class="filter-field"><label for="history-employee" data-i18n="employee">Employee</label><select id="history-employee"><option value="" data-i18n="allEmployees">All employees</option></select></div>
+    <div class="filter-field"><label for="history-person-type" data-i18n="personType">Person type</label><select id="history-person-type"><option value="" data-i18n="allPeople">All people</option><option value="IDENTIFIED" data-i18n="identifiedPeople">Identified</option><option value="STRANGER" data-i18n="strangerPeople">Strangers</option><option value="UNRESOLVED" data-i18n="unresolvedPeople">Unresolved</option></select></div>
+    <div class="filter-field"><label for="history-keyword" data-i18n="keyword">Keyword</label><input id="history-keyword" type="search" maxlength="100" data-i18n-placeholder="keywordHint" placeholder="Name, employee no., identity or track"></div>
     <div class="filter-field"><label for="history-camera" data-i18n="camera">Camera</label><select id="history-camera"><option value="" data-i18n="allCameras">All cameras</option></select></div>
     <div class="filter-field"><label for="history-area" data-i18n="area">Area</label><select id="history-area"><option value="" data-i18n="allAreas">All areas</option></select></div>
     <label class="check-field"><input id="history-alerts" type="checkbox"><span data-i18n="alertsOnly">With safety alerts</span></label>
@@ -312,11 +341,11 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
   </form>
   <div class="history-grid">
     <section class="history-panel" aria-labelledby="history-results-title">
-      <div class="history-panel-head"><b id="history-results-title" data-i18n="visitResults">Employee results</b><span id="history-count">0</span></div>
+      <div class="history-panel-head"><b id="history-results-title" data-i18n="visitResults">People results</b><span id="history-count">0</span></div>
       <div class="history-list" id="history-list"><div class="history-state" data-i18n="historyIdle">Choose a date range to search.</div></div>
     </section>
     <section class="history-panel history-detail" id="history-detail" aria-live="polite">
-      <div class="history-state" data-i18n="selectEmployee">Select an employee to view the timeline.</div>
+      <div class="history-state" data-i18n="selectPerson">Select a person to view the timeline.</div>
     </section>
   </div>
 </main>
@@ -328,6 +357,31 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
 
 </div>
 
+<div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+<aside class="spot-drawer" id="spot-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" hidden>
+  <div class="drawer-head"><div><h2 id="drawer-title" data-i18n="adjustBay">Adjust bay</h2><p id="drawer-subtitle"></p></div><button class="icon-button" id="drawer-close" type="button" data-i18n-aria="close" aria-label="Close">×</button></div>
+  <div class="spot-facts">
+    <div class="spot-fact"><span data-i18n="currentStatus">Current status</span><b id="drawer-current">-</b></div>
+    <div class="spot-fact"><span data-i18n="plate">Plate</span><b id="drawer-plate">-</b></div>
+    <div class="spot-fact"><span data-i18n="duration">Duration</span><b id="drawer-duration">-</b></div>
+    <div class="spot-fact"><span data-i18n="statusSource">Source</span><b id="drawer-source">-</b></div>
+    <div class="spot-fact"><span data-i18n="updatedAt">Updated</span><b id="drawer-updated">-</b></div>
+  </div>
+  <form class="override-form" id="override-form">
+    <fieldset><legend data-i18n="targetStatus">Target status</legend><div class="status-options">
+      <label class="status-option"><input type="radio" name="override-status" value="FREE"><span data-i18n="free">Free</span></label>
+      <label class="status-option"><input type="radio" name="override-status" value="OCCUPIED"><span data-i18n="occupied">Occupied</span></label>
+      <label class="status-option"><input type="radio" name="override-status" value="BLOCKED"><span data-i18n="blocked">Blocked</span></label>
+    </div></fieldset>
+    <label for="override-reason" data-i18n="reason">Reason</label><select id="override-reason" required><option value="" data-i18n="chooseReason">Choose a reason</option></select>
+    <label for="override-remark" data-i18n="remark">Remark (optional)</label><textarea id="override-remark" maxlength="200"></textarea>
+    <div class="override-summary" id="override-summary"></div>
+    <div class="override-warning" data-i18n="overrideWarning">A later device report may replace this manual correction.</div>
+    <div class="form-error" id="override-error" role="alert"></div>
+    <div class="drawer-actions"><button type="button" id="drawer-cancel" data-i18n="cancel">Cancel</button><button class="primary" type="submit" id="override-submit" data-i18n="confirmAdjustment">Confirm adjustment</button></div>
+  </form>
+</aside>
+
 <script>
 const API = "/api/v1/dashboard";
 const HISTORY_API = "/api/v1/history/person-visits";
@@ -337,7 +391,7 @@ const I18N = {
   subtitle:["OWNER'S DESK","老板经营台 · 车间智能监控"],
   vehiclesToday:["VEHICLES TODAY","今日进出台次"], utilisation:["BAY UTILISATION","工位利用率"],
   avgService:["AVG SERVICE TIME","平均维修时长"], staffTitle:["Staff on Floor","在场人员"],
-  baysTitle:["Workshop Bays","工位实况"], bayHint:["Click a bay to override","点击卡片可人工修正"],
+  baysTitle:["Workshop Bays","工位实况"], bayHint:["Use Adjust to correct a bay","点击“调整”可人工修正"], adjust:["Adjust","调整"],
   alertsTitle:["Safety Alerts","安全告警"], latest:["latest 20","最近 20 条"],
   vehiclesTitle:["Vehicles in Workshop","在场车辆"], devicesTitle:["Devices","设备状态"],
   deviceHint:["Offline after 60s without heartbeat","摄像头 60 秒无心跳判离线"],
@@ -358,30 +412,35 @@ const I18N = {
   noAlerts:["No alerts","暂无告警"], platePending:["Plate pending…","车牌待识别…"], checkIn:["CHECK-IN","刚入场"],
   elapsed:["elapsed","已停留"], entryTime:["entry time","入场时间"], noVehicles:["No vehicles","暂无在场车辆"],
   offline:["OFFLINE","离线"], fps:["FPS","帧/秒"], sec:["s","秒"], min:["m","分"], hour:["h","小时"],
-  overridePrompt:["Manual override for {id}\nEnter status: FREE / OCCUPIED / BLOCKED","人工修正工位 {id}\n请输入：空闲 / 占用 / 受阻（也支持 FREE / OCCUPIED / BLOCKED）"],
-  invalidStatus:["Invalid status. Use FREE / OCCUPIED / BLOCKED.","状态无效，请输入：空闲 / 占用 / 受阻。"],
   failed:["Operation failed","操作失败"], requestFailed:["Request failed. Please check your connection.","请求失败，请检查网络连接。"],
   "invalid body or status":["Invalid body or status","请求或工位状态无效"], "unknown spot_id":["Unknown bay","工位不存在"],
+  "reason_code is required and must match status":["Reason is required and must match the target status","修正原因必填，且必须与目标状态匹配"],
+  "remark must not exceed 200 characters":["Remark must not exceed 200 characters","备注不能超过 200 个字符"],
+  "remark is required when reason_code is OTHER":["A remark is required when the reason is Other","选择“其他”原因时必须填写备注"],
   NO_HELMET:["No helmet","未戴安全帽"], NO_VEST:["No vest","未穿背心"],
   DANGER_ZONE:["Danger zone intrusion","闯入危险区"], FALL_DOWN:["Fall detected","人员倒地"],
   GATHERING:["Gathering","人员聚集"], LOITERING:["Loitering","人员滞留"],
   "Senior Mechanic":["Senior Mechanic","高级维修技师"], "Mechanic":["Mechanic","维修技师"],
   "Service Advisor":["Service Advisor","服务顾问"], "Panel Beater":["Panel Beater","钣金技师"],
   viewNavigation:["Primary views","主要视图"], liveDashboard:["Live dashboard","实时看板"], historyCentre:["History centre","历史中心"],
-  staffHistory:["Staff history","员工历史"], historyScope:["Verified camera and area observations, without inferred walking routes.","仅展示已核实的摄像头与区域观测，不推测行走路线。"],
-  fromDate:["From date","开始日期"], toDate:["To date","结束日期"], employee:["Employee","员工"], camera:["Camera","摄像头"], area:["Area","区域"],
-  allEmployees:["All employees","全部员工"], allCameras:["All cameras","全部摄像头"], allAreas:["All areas","全部区域"],
-  alertsOnly:["With safety alerts","仅看安全告警"], search:["Search","查询"], reset:["Reset","重置"], visitResults:["Employee results","员工结果"],
-  historyIdle:["Choose a date range to search.","请选择日期范围后查询。"], selectEmployee:["Select an employee to view the timeline.","选择员工后查看时间线。"],
-  loading:["Loading...","正在加载..."], noHistory:["No matching staff history","没有符合条件的员工历史"], resultCount:["{n} employee(s)","{n} 名员工"],
+  peopleHistory:["People history","人员历史"], historyScope:["All reported people observations, without inferred walking routes.","展示所有已上报人员观测，不推测跨摄像头行走路线。"],
+  fromDate:["From date","开始日期"], toDate:["To date","结束日期"], personType:["Person type","人员类型"], keyword:["Keyword","关键词"], keywordHint:["Name, employee no., identity or track","姓名、员工编号、身份或轨迹编号"], camera:["Camera","摄像头"], area:["Area","区域"],
+  allPeople:["All people","全部人员"], identifiedPeople:["Identified","已识别"], strangerPeople:["Strangers","陌生人员"], unresolvedPeople:["Unresolved","待识别人员"], allCameras:["All cameras","全部摄像头"], allAreas:["All areas","全部区域"],
+  alertsOnly:["With safety alerts","仅看安全告警"], search:["Search","查询"], reset:["Reset","重置"], visitResults:["People results","人员结果"],
+  historyIdle:["Choose a date range to search.","请选择日期范围后查询。"], selectPerson:["Select a person to view the timeline.","选择人员后查看时间线。"],
+  loading:["Loading...","正在加载..."], noHistory:["No matching people history","没有符合条件的人员历史"], resultCount:["{n} person record(s)","共 {n} 条人员记录"],
   observedDuration:["Observed duration","记录时长"], observations:["{n} observations","{n} 个观测节点"], segments:["{n} camera segment(s)","{n} 个摄像头轨迹段"],
-  alertsCount:["{n} alert(s)","{n} 次告警"], dataGaps:["{n} incomplete segment(s)","{n} 个轨迹段缺少进出事件"],
+  alertsCount:["{n} safety event(s)","{n} 次告警"], dataGaps:["{n} incomplete segment(s)","{n} 个轨迹段缺少进出事件"],
   timeline:["Observation timeline","观测时间线"], viewSnapshot:["View alert snapshot","查看告警抓拍"], unknownArea:["Area not reported","未上报区域"],
   PERSON_ENTER:["Entered camera view","进入摄像头视野"], PERSON_LEAVE:["Left camera view","离开摄像头视野"],
-  IDENTITY_UPDATE:["Identity confirmed","身份已确认"], BEHAVIOR:["Safety event","安全行为事件"], historyFailed:["History query failed","历史查询失败"]
+  IDENTITY_UPDATE:["Identity confirmed","身份已确认"], BEHAVIOR:["Safety event","安全行为事件"], historyFailed:["History query failed","历史查询失败"],
+  adjustBay:["Adjust bay","调整工位"], close:["Close","关闭"], currentStatus:["Current status","当前状态"], plate:["Plate","车牌"], duration:["Duration","持续时长"], statusSource:["Source","状态来源"], updatedAt:["Updated","更新时间"], targetStatus:["Target status","目标状态"], occupied:["Occupied","占用"], reason:["Reason","修正原因"], chooseReason:["Choose a reason","请选择原因"], remark:["Remark (optional)","备注（可选）"], cancel:["Cancel","取消"], confirmAdjustment:["Confirm adjustment","确认调整"],
+  device:["Device report","设备上报"], overrideSummary:["Change {id} from {from} to {to}","将 {id} 从“{from}”调整为“{to}”"], chooseTarget:["Choose a target status","请选择目标状态"], reasonRequired:["Choose a reason.","请选择修正原因。"], otherRemarkRequired:["A remark is required for Other.","选择“其他”时必须填写备注。"], overrideWarning:["A later device report may replace this manual correction.","后续设备状态上报可能覆盖本次人工修正。"], adjustmentSaved:["Adjustment saved","调整已保存"],
+  VEHICLE_LEFT:["Vehicle left","车辆已离开"], VEHICLE_ARRIVED:["Vehicle arrived","车辆已到达"], SENSOR_ERROR:["Sensor error","传感器异常"], BAY_MAINTENANCE:["Bay maintenance","工位维护"], OTHER:["Other","其他"]
 };
 let language = "en", lastDashboard = null, connectionState = "connecting";
-let activeView = "dashboard", historyResults = [], historyDetail = null, historyMeta = null, selectedIdentity = "";
+let activeView = "dashboard", historyResults = [], historyDetail = null, historyMeta = null, selectedPersonKey = "";
+let activeSpot = null, drawerReturnFocus = null, overrideSubmitting = false;
 try { if(localStorage.getItem("workshop-language") === "zh") language = "zh"; } catch(e) { /* 存储不可用时仍可切换 */ }
 function t(key, values = {}){
   const value = I18N[key]?.[language === "zh" ? 1 : 0] ?? String(key ?? "");
@@ -398,10 +457,13 @@ function setLanguage(next){
   document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
   document.title = t("title");
   document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
+  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => el.placeholder = t(el.dataset.i18nPlaceholder));
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => el.setAttribute("aria-label", t(el.dataset.i18nAria)));
   document.querySelectorAll("[data-lang]").forEach(el => el.setAttribute("aria-pressed", String(el.dataset.lang === language)));
   updateConnection(connectionState);
   if(lastDashboard) render(lastDashboard);
   renderHistory();
+  if(activeSpot) renderSpotDrawer();
 }
 
 const $ = id => document.getElementById(id);
@@ -476,21 +538,22 @@ function render(d){
   /* bays */
   $("bay-cnt").textContent = t("bayCount", {n:tot});
   $("bays").innerHTML = spots.map(s=>{
+    const actions = `<div class="bay-actions">${s.overridden?`<span class="ovr">${t("manual")}</span>`:""}<button type="button" class="bay-adjust" data-spot-id="${esc(s.spot_id)}">${t("adjust")}</button></div>`;
     if(s.status === "FREE")
-      return `<div class="bay free" onclick="overrideSpot('${s.spot_id}')"><div class="bid">${s.spot_id}</div>
+      return `<article class="bay free"><div class="bid">${esc(s.spot_id)}</div>
         <div class="plate">${t("available")}</div><div class="st"><i></i>${t("free")}</div>
-        ${s.overridden?`<span class="ovr">${t("manual")}</span>`:""}</div>`;
+        ${actions}</article>`;
     if(s.status === "BLOCKED")
-      return `<div class="bay blk" onclick="overrideSpot('${s.spot_id}')"><div class="bid">${s.spot_id}</div>
+      return `<article class="bay blk"><div class="bid">${esc(s.spot_id)}</div>
         <div class="plate">${t("blocked")}</div><div class="st"><i></i>${t("unclear")}</div>
-        ${s.overridden?`<span class="ovr">${t("manual")}</span>`:""}</div>`;
+        ${actions}</article>`;
     const over = s.over_target;
-    return `<div class="bay ${over?"over":"busy"}" data-over-label="${t("overBadge")}" onclick="overrideSpot('${s.spot_id}')">
-      <div class="bid">${s.spot_id}</div>
-      <div class="plate">${s.plate_no||"-"}</div>
+    return `<article class="bay ${over?"over":"busy"}" data-over-label="${t("overBadge")}">
+      <div class="bid">${esc(s.spot_id)}</div>
+      <div class="plate">${esc(s.plate_no||"-")}</div>
       <div class="timer">${fmtDur(s.elapsed_sec||0)}</div>
       <div class="st"><i></i>${t(over?"over":"service")}</div>
-      ${s.overridden?`<span class="ovr">${t("manual")}</span>`:""}</div>`;
+      ${actions}</article>`;
   }).join("");
 
   /* staff */
@@ -536,13 +599,14 @@ function render(d){
       <small>${c.status==="ONLINE" ? Math.round(c.fps)+" "+t("fps") : t("offline")}</small></div>`).join("");
 }
 
-function historyParams(includeIdentity = true){
+function historyParams(includePersonFilters = true){
   const fromValue = $("history-from").value;
   const toValue = $("history-to").value;
   const from = new Date(`${fromValue}T00:00:00`);
   const to = new Date(`${toValue}T23:59:59.999`);
   const params = new URLSearchParams({from:from.toISOString(), to:to.toISOString()});
-  if(includeIdentity && $("history-employee").value) params.set("identity_id", $("history-employee").value);
+  if(includePersonFilters && $("history-person-type").value) params.set("identity_status", $("history-person-type").value);
+  if(includePersonFilters && $("history-keyword").value.trim()) params.set("keyword", $("history-keyword").value.trim());
   if($("history-camera").value) params.set("camera_id", $("history-camera").value);
   if($("history-area").value) params.set("area_id", $("history-area").value);
   if($("history-alerts").checked) params.set("alert_only", "1");
@@ -558,7 +622,6 @@ function fillSelect(id, items, valueKey, labelFn, allKey){
 
 function renderHistoryMeta(){
   if(!historyMeta) return;
-  fillSelect("history-employee", historyMeta.employees||[], "identity_id", item=>`${item.name || item.identity_id} · ${item.employee_no || item.identity_id}`, "allEmployees");
   fillSelect("history-camera", historyMeta.cameras||[], "", item=>item, "allCameras");
   fillSelect("history-area", historyMeta.areas||[], "", item=>item, "allAreas");
 }
@@ -571,11 +634,13 @@ function renderHistory(){
   }else{
     $("history-count").textContent = t("resultCount", {n:historyResults.length});
     $("history-list").innerHTML = historyResults.map(item=>{
-      const title = item.name || item.identity_id;
-      const active = item.identity_id === selectedIdentity;
-      return `<button type="button" class="history-person ${active?"active":""}" data-identity="${esc(item.identity_id)}" aria-pressed="${active}">
+      const status = item.identity_status || "IDENTIFIED";
+      const title = status === "IDENTIFIED" ? (item.name || item.identity_id) : t(status === "STRANGER" ? "unknown" : "identifying");
+      const identityLine = status === "IDENTIFIED" ? `${item.employee_no || item.identity_id}${item.role?" · "+t(item.role):""}` : [t(status === "STRANGER" ? "strangerPeople" : "unresolvedPeople"), ...(item.track_ids||[])].join(" · ");
+      const active = item.person_key === selectedPersonKey;
+      return `<button type="button" class="history-person ${active?"active":""}" data-person-key="${esc(item.person_key)}" aria-pressed="${active}">
         <span class="person-top"><b>${esc(title)}</b><span>${esc(fmtHM(item.first_seen))} - ${esc(fmtHM(item.last_seen))}</span></span>
-        <span class="person-no">${esc(item.employee_no || item.identity_id)}${item.role?" · "+esc(t(item.role)):""}</span>
+        <span class="person-no">${esc(identityLine)}</span>
         <span class="person-meta"><span>${esc(t("observations", {n:item.event_count}))}</span><span>${esc(t("segments", {n:item.segment_count}))}</span>
           ${item.alert_count?`<span class="alert-count">${esc(t("alertsCount", {n:item.alert_count}))}</span>`:""}</span>
       </button>`;
@@ -583,13 +648,16 @@ function renderHistory(){
   }
 
   if(!historyDetail){
-    $("history-detail").innerHTML = `<div class="history-state">${esc(t("selectEmployee"))}</div>`;
+    $("history-detail").innerHTML = `<div class="history-state">${esc(t("selectPerson"))}</div>`;
     return;
   }
   const summary = historyDetail.summary, nodes = historyDetail.nodes || [];
+  const summaryStatus = summary.identity_status || "IDENTIFIED";
+  const summaryTitle = summaryStatus === "IDENTIFIED" ? (summary.name || summary.identity_id) : t(summaryStatus === "STRANGER" ? "unknown" : "identifying");
+  const summaryLine = summaryStatus === "IDENTIFIED" ? `${summary.employee_no || summary.identity_id}${summary.role?" · "+t(summary.role):""}` : [t(summaryStatus === "STRANGER" ? "strangerPeople" : "unresolvedPeople"), ...(summary.track_ids||[])].join(" · ");
   $("history-detail").innerHTML = `<div class="history-panel-head"><b>${esc(t("timeline"))}</b><span>${esc(fmtDateTime(summary.first_seen))}</span></div>
-    <div class="history-identity"><h2>${esc(summary.name || summary.identity_id)}</h2>
-      <p>${esc(summary.employee_no || summary.identity_id)}${summary.role?" · "+esc(t(summary.role)):""}</p>
+    <div class="history-identity"><h2>${esc(summaryTitle)}</h2>
+      <p>${esc(summaryLine)}</p>
       <div class="history-stats"><div><b>${esc(fmtDur(summary.duration_sec))}</b>${esc(t("observedDuration"))}</div>
         <div><b>${summary.event_count}</b>${esc(t("observations", {n:summary.event_count}))}</div>
         <div><b>${summary.alert_count}</b>${esc(t("alertsCount", {n:summary.alert_count}))}</div></div></div>
@@ -604,14 +672,14 @@ function renderHistory(){
     }).join("")}</div>`;
 }
 
-async function loadHistoryDetail(identityID){
-  selectedIdentity = identityID;
+async function loadHistoryDetail(personKey){
+  selectedPersonKey = personKey;
   historyDetail = null;
   renderHistory();
   $("history-detail").innerHTML = `<div class="history-state">${esc(t("loading"))}</div>`;
   try{
     const params = historyParams(false);
-    const res = await fetch(`${HISTORY_API}/${encodeURIComponent(identityID)}?${params}`);
+    const res = await fetch(`${HISTORY_API}/${encodeURIComponent(personKey)}?${params}`);
     const j = await res.json();
     if(j.code !== 0) throw new Error(j.message);
     historyDetail = j.data;
@@ -625,7 +693,7 @@ async function queryHistory(){
   historyDetail = null;
   historyResults = [];
   $("history-list").innerHTML = `<div class="history-state">${esc(t("loading"))}</div>`;
-  $("history-detail").innerHTML = `<div class="history-state">${esc(t("selectEmployee"))}</div>`;
+  $("history-detail").innerHTML = `<div class="history-state">${esc(t("selectPerson"))}</div>`;
   try{
     const res = await fetch(`${HISTORY_API}?${historyParams()}`);
     const j = await res.json();
@@ -634,9 +702,9 @@ async function queryHistory(){
     historyMeta = j.data.filters || historyMeta;
     $("clock").textContent = (j.data.server_time || "").slice(11,19);
     updateConnection("live");
-    selectedIdentity = historyResults.some(item=>item.identity_id===selectedIdentity) ? selectedIdentity : (historyResults[0]?.identity_id || "");
+    selectedPersonKey = historyResults.some(item=>item.person_key===selectedPersonKey) ? selectedPersonKey : (historyResults[0]?.person_key || "");
     renderHistory();
-    if(selectedIdentity) await loadHistoryDetail(selectedIdentity);
+    if(selectedPersonKey) await loadHistoryDetail(selectedPersonKey);
   }catch(e){
     historyMeta = historyMeta || {};
     updateConnection("disconnected");
@@ -656,38 +724,122 @@ function setView(view){
   if(activeView === "dashboard") refresh();
 }
 
-/* 人工修正 */
-async function overrideSpot(spotId){
-  const cur = prompt(t("overridePrompt", {id:spotId}), language === "zh" ? "空闲" : "FREE");
-  if(!cur) return;
-  const input = cur.trim().toUpperCase();
-  const status = ({"空闲":"FREE","占用":"OCCUPIED","受阻":"BLOCKED"})[input] || input;
-  if(!["FREE","OCCUPIED","BLOCKED"].includes(status)) { alert(t("invalidStatus")); return; }
+const OVERRIDE_REASONS = {
+  FREE:["VEHICLE_LEFT","SENSOR_ERROR","OTHER"],
+  OCCUPIED:["VEHICLE_ARRIVED","SENSOR_ERROR","OTHER"],
+  BLOCKED:["BAY_MAINTENANCE","SENSOR_ERROR","OTHER"]
+};
+function statusLabel(status){ return t(({FREE:"free",OCCUPIED:"occupied",BLOCKED:"blocked"})[status] || status); }
+function selectedOverrideStatus(){ return document.querySelector('input[name="override-status"]:checked')?.value || ""; }
+function renderSpotDrawer(){
+  if(!activeSpot) return;
+  $("drawer-subtitle").textContent = activeSpot.spot_id;
+  $("drawer-current").textContent = statusLabel(activeSpot.status);
+  $("drawer-plate").textContent = activeSpot.plate_no || "-";
+  $("drawer-duration").textContent = fmtDur(activeSpot.elapsed_sec || 0);
+  $("drawer-source").textContent = t(activeSpot.overridden ? "manual" : "device");
+  $("drawer-updated").textContent = fmtDateTime(activeSpot.updated_at || activeSpot.since || activeSpot.status_since || activeSpot.last_seen);
+  document.querySelectorAll('input[name="override-status"]').forEach(input=>{
+    input.disabled = input.value === activeSpot.status;
+    if(input.disabled) input.checked = false;
+  });
+  updateOverrideReasonOptions();
+}
+function updateOverrideReasonOptions(){
+  const status = selectedOverrideStatus(), select = $("override-reason"), current = select.value;
+  select.innerHTML = `<option value="">${esc(t("chooseReason"))}</option>` + (OVERRIDE_REASONS[status] || []).map(reason=>`<option value="${reason}">${esc(t(reason))}</option>`).join("");
+  if((OVERRIDE_REASONS[status] || []).includes(current)) select.value = current;
+  const from = activeSpot ? statusLabel(activeSpot.status) : "-", to = status ? statusLabel(status) : t("chooseTarget");
+  $("override-summary").textContent = activeSpot ? t("overrideSummary", {id:activeSpot.spot_id, from, to}) : "";
+}
+function openSpotDrawer(spotId, trigger){
+  activeSpot = (lastDashboard?.spots || []).find(spot=>spot.spot_id === spotId) || null;
+  if(!activeSpot) return;
+  drawerReturnFocus = trigger || null;
+  $("override-form").reset();
+  $("override-error").textContent = "";
+  $("drawer-backdrop").hidden = false;
+  $("spot-drawer").hidden = false;
+  $("spot-drawer").classList.add("open");
+  renderSpotDrawer();
+  $("drawer-close").focus();
+}
+function closeSpotDrawer(force = false){
+  if(overrideSubmitting && force !== true) return;
+  $("spot-drawer").classList.remove("open");
+  $("spot-drawer").hidden = true;
+  $("drawer-backdrop").hidden = true;
+  activeSpot = null;
+  const target = drawerReturnFocus;
+  drawerReturnFocus = null;
+  if(target?.focus) target.focus();
+}
+async function submitOverride(){
+  if(!activeSpot || overrideSubmitting) return;
+  const status = selectedOverrideStatus(), reason = $("override-reason").value, remark = $("override-remark").value.trim();
+  if(!status){ $("override-error").textContent = t("chooseTarget"); return; }
+  if(!reason){ $("override-error").textContent = t("reasonRequired"); return; }
+  if(reason === "OTHER" && !remark){ $("override-error").textContent = t("otherRemarkRequired"); return; }
+  overrideSubmitting = true;
+  document.querySelectorAll('input[name="override-status"]').forEach(input=>input.disabled=true);
+  $("override-reason").disabled = true;
+  $("override-remark").disabled = true;
+  $("drawer-cancel").disabled = true;
+  $("override-submit").disabled = true;
+  $("override-error").textContent = "";
   try{
-    const res = await fetch(`/api/v1/spots/${spotId}/override`, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({status, operator:"admin", remark:"manual override from dashboard"})
+    const res = await fetch(`/api/v1/spots/${encodeURIComponent(activeSpot.spot_id)}/override`, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({status, reason_code:reason, remark, operator:"dashboard"})
     });
     const j = await res.json();
-    if(j.code !== 0) alert(t("failed") + ": " + t(j.message || "requestFailed"));
-    refresh();
-  }catch(e){ alert(t("requestFailed")); }
+    if(j.code !== 0) throw new Error(j.message || "requestFailed");
+    closeSpotDrawer(true);
+    await refresh();
+  }catch(e){
+    $("override-error").textContent = `${t("failed")}: ${t(e.message || "requestFailed")}`;
+  }finally{
+    overrideSubmitting = false;
+    $("override-reason").disabled = false;
+    $("override-remark").disabled = false;
+    $("drawer-cancel").disabled = false;
+    $("override-submit").disabled = false;
+    if(activeSpot) renderSpotDrawer();
+  }
 }
 
 document.querySelectorAll("[data-lang]").forEach(el => el.addEventListener("click", () => setLanguage(el.dataset.lang)));
 $("view-dashboard").addEventListener("click", () => setView("dashboard"));
 $("view-history").addEventListener("click", () => setView("history"));
+$("bays").addEventListener("click", event=>{
+  const button = event.target.closest("[data-spot-id]");
+  if(button) openSpotDrawer(button.dataset.spotId, button);
+});
+$("drawer-close").addEventListener("click", ()=>closeSpotDrawer());
+$("drawer-cancel").addEventListener("click", ()=>closeSpotDrawer());
+$("drawer-backdrop").addEventListener("click", ()=>closeSpotDrawer());
+$("override-form").addEventListener("change", event=>{ if(event.target.name === "override-status") updateOverrideReasonOptions(); });
+$("override-form").addEventListener("submit", event=>{ event.preventDefault(); submitOverride(); });
+document.addEventListener("keydown", event=>{
+  if(!activeSpot) return;
+  if(event.key === "Escape"){ event.preventDefault(); closeSpotDrawer(); return; }
+  if(event.key !== "Tab") return;
+  const focusable = [...$("spot-drawer").querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])')];
+  if(!focusable.length) return;
+  const first = focusable[0], last = focusable[focusable.length-1];
+  if(event.shiftKey && document.activeElement === first){ event.preventDefault(); last.focus(); }
+  else if(!event.shiftKey && document.activeElement === last){ event.preventDefault(); first.focus(); }
+});
 $("history-form").addEventListener("submit", event=>{ event.preventDefault(); queryHistory(); });
 $("history-reset").addEventListener("click", ()=>{
   const today = localDateValue(new Date());
   $("history-from").value = today; $("history-to").value = today;
-  $("history-employee").value = ""; $("history-camera").value = ""; $("history-area").value = ""; $("history-alerts").checked = false;
+  $("history-person-type").value = ""; $("history-keyword").value = ""; $("history-camera").value = ""; $("history-area").value = ""; $("history-alerts").checked = false;
   queryHistory();
 });
 $("history-list").addEventListener("click", event=>{
-  const button = event.target.closest("[data-identity]");
-  if(button) loadHistoryDetail(button.dataset.identity);
+  const button = event.target.closest("[data-person-key]");
+  if(button) loadHistoryDetail(button.dataset.personKey);
 });
 const initialDate = localDateValue(new Date());
 $("history-from").value = initialDate; $("history-to").value = initialDate;

@@ -48,7 +48,7 @@ func (s *Server) routes() http.Handler {
 	mux.HandleFunc("GET /api/v1/dashboard", s.handleDashboard)
 	mux.HandleFunc("GET /api/v1/events", s.handleQueryEvents)
 	mux.HandleFunc("GET /api/v1/history/person-visits", s.handlePersonHistory)
-	mux.HandleFunc("GET /api/v1/history/person-visits/{identity_id}", s.handlePersonHistoryDetail)
+	mux.HandleFunc("GET /api/v1/history/person-visits/{key}", s.handlePersonHistoryDetail)
 	mux.HandleFunc("POST /api/v1/spots/{spot_id}/override", s.handleOverride)
 	mux.Handle("GET /snapshots/", http.StripPrefix("/snapshots/", http.FileServer(http.Dir(s.snapDir))))
 
