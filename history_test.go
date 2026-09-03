@@ -124,7 +124,8 @@ func TestPersonHistoryIncludesUnknownSegmentsAndSupportsNewKeysAndFilters(t *tes
 		}
 	}
 	// 同一观测分段由待识别转为陌生人，应保留为一条陌生人历史。
-	insert("unknown-first", "PERSON_ENTER", 0, "CAM_001", "ENTRY", "TRACK-UNKNOWN-1", "UNRESOLVED", "", "")
+	unknownFirstEventID := "d142843e-6303-427b-af61-4b923936a905"
+	insert(unknownFirstEventID, "PERSON_ENTER", 0, "CAM_001", "ENTRY", "TRACK-UNKNOWN-1", "UNRESOLVED", "", "")
 	insert("unknown-status", "IDENTITY_UPDATE", time.Minute, "CAM_001", "ENTRY", "TRACK-UNKNOWN-1", "STRANGER", "", "")
 	insert("unknown-alert", "BEHAVIOR", 2*time.Minute, "CAM_001", "BAY_A", "TRACK-UNKNOWN-1", "STRANGER", "", "DANGER_ZONE")
 	insert("unknown-leave", "PERSON_LEAVE", 3*time.Minute, "CAM_001", "BAY_A", "TRACK-UNKNOWN-1", "STRANGER", "", "")
@@ -163,7 +164,7 @@ func TestPersonHistoryIncludesUnknownSegmentsAndSupportsNewKeysAndFilters(t *tes
 	if len(list) != 4 {
 		t.Fatalf("want four independent people, got %d: %#v", len(list), list)
 	}
-	unknownKey := "obs_" + base64.RawURLEncoding.EncodeToString([]byte("unknown-first"))
+	unknownKey := "obs_" + base64.RawURLEncoding.EncodeToString([]byte(unknownFirstEventID))
 	identifiedKey := "id_" + base64.RawURLEncoding.EncodeToString([]byte("EMP_10086"))
 	seen := map[string]map[string]any{}
 	for _, raw := range list {

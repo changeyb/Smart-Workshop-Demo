@@ -406,18 +406,22 @@ func (s *Server) handlePersonHistoryDetail(w http.ResponseWriter, r *http.Reques
 		writeJSON(w, http.StatusOK, fail(40001, "missing person key"))
 		return
 	}
-	if strings.HasPrefix(key, "id_") || strings.HasPrefix(key, "obs_") {
-		prefix, encoded := key[:3], key[3:]
+	if strings.HasPrefix(key, "id_") {
+		encoded := strings.TrimPrefix(key, "id_")
 		decoded, err := base64.RawURLEncoding.DecodeString(encoded)
 		if err != nil || len(decoded) == 0 {
 			writeJSON(w, http.StatusOK, fail(40001, "invalid person key"))
 			return
 		}
-		if prefix == "id_" {
-			q.identityID = string(decoded)
-		} else {
-			q.personKey = key
+		q.identityID = string(decoded)
+	} else if strings.HasPrefix(key, "obs_") {
+		encoded := strings.TrimPrefix(key, "obs_")
+		decoded, err := base64.RawURLEncoding.DecodeString(encoded)
+		if err != nil || len(decoded) == 0 {
+			writeJSON(w, http.StatusOK, fail(40001, "invalid person key"))
+			return
 		}
+		q.personKey = key
 	} else {
 		q.identityID = key
 	}
