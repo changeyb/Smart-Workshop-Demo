@@ -36,6 +36,13 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 .livechip.err i{background:var(--red)}
 @keyframes p{50%{opacity:.3}}
 .clockbox{font-family:var(--mono);font-size:14px;color:#34445B;font-weight:700}
+.view-nav{display:flex;gap:4px;width:max-content;margin:0 0 18px;padding:4px;background:#D5DDE7;border-radius:10px}
+.view-nav button{border:0;background:transparent;color:#40516A;padding:8px 16px;border-radius:7px;
+  font:750 14px var(--sans);cursor:pointer}
+.view-nav button[aria-selected="true"]{background:#fff;color:var(--blue);box-shadow:0 1px 4px rgba(28,47,72,.14)}
+.view-nav button:focus-visible,.history-filters button:focus-visible,.history-person:focus-visible,
+.history-filters input:focus-visible,.history-filters select:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+[hidden]{display:none!important}
 
 .kpis{display:grid;grid-template-columns:1.35fr 1fr 1fr 1fr;gap:15px}
 .kpi{background:var(--card);border-radius:var(--r);padding:21px 22px;border:1px solid var(--line);border-top:5px solid #7C8DA3}
@@ -139,6 +146,52 @@ header{display:flex;align-items:center;gap:16px;padding:7px 2px 22px;flex-wrap:w
 .camchip.off{color:var(--red)} .camchip.off i{background:var(--red)}
 .camchip small{color:#4C5F56;font-weight:650}
 
+.history-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:4px 2px 16px}
+.history-head h1{font-size:26px;line-height:1.2;letter-spacing:-.025em}
+.history-head p{color:#53637A;font-size:13px;margin-top:4px}
+.history-filters{display:grid;grid-template-columns:1fr 1fr 1.25fr 1fr 1fr auto;gap:12px;align-items:end;
+  background:#F7F9FC;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:var(--r);padding:18px 20px}
+.filter-field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.filter-field label,.check-field{font-size:12px;color:#475970;font-weight:750}
+.filter-field input,.filter-field select{width:100%;height:40px;border:1px solid #B7C3D1;border-radius:8px;background:#fff;
+  color:var(--ink);font:650 13px var(--sans);padding:0 10px}
+.check-field{height:40px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.check-field input{width:17px;height:17px;accent-color:var(--blue)}
+.filter-actions{display:flex;gap:8px;grid-column:1/-1;justify-content:flex-end}
+.history-filters button{height:40px;border-radius:8px;padding:0 15px;border:1px solid #AEBBCB;background:#fff;
+  color:#31445E;font:750 13px var(--sans);cursor:pointer;white-space:nowrap}
+.history-filters button.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.history-grid{display:grid;grid-template-columns:minmax(300px,.75fr) minmax(0,1.25fr);gap:15px;margin-top:15px;align-items:start}
+.history-panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 7px 22px rgba(35,55,80,.06)}
+.history-panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;background:#F8FAFC;border-bottom:1px solid #DDE4EC}
+.history-panel-head b{font-size:15px}.history-panel-head span{font-size:12px;color:#53637A;font-weight:650}
+.history-list{max-height:620px;overflow:auto}
+.history-person{display:block;width:100%;border:0;border-bottom:1px solid #E1E6ED;background:#fff;text-align:left;
+  padding:15px 18px;cursor:pointer;color:var(--ink);font-family:var(--sans)}
+.history-person:last-child{border-bottom:0}.history-person:hover{background:#F5F8FC}
+.history-person.active{background:var(--blue-soft);box-shadow:inset 4px 0 0 var(--blue)}
+.history-person .person-top{display:flex;align-items:center;gap:8px}.history-person .person-top b{font-size:14px}
+.history-person .person-top span{margin-left:auto;color:#52637A;font:650 11px var(--mono)}
+.history-person .person-no{font-size:11px;color:#617086;margin-top:2px}
+.history-person .person-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:9px;color:#42536A;font-size:11px;font-weight:650}
+.history-person .alert-count{color:var(--red)}
+.history-detail{min-height:430px}
+.history-identity{padding:18px 20px 15px;border-bottom:1px solid #E1E6ED}
+.history-identity h2{font-size:19px}.history-identity p{font-size:12px;color:#52637A;margin-top:2px}
+.history-stats{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
+.history-stats div{font-size:11px;color:#617086}.history-stats b{display:block;color:var(--ink);font-size:14px}
+.timeline{padding:6px 20px 22px}
+.timeline-node{display:grid;grid-template-columns:54px 14px minmax(0,1fr);gap:10px;position:relative;padding-top:16px}
+.timeline-node::after{content:"";position:absolute;left:74px;top:31px;bottom:-17px;width:2px;background:#D6DEE8}
+.timeline-node:last-child::after{display:none}
+.timeline-time{font:700 12px var(--mono);color:#4B5C72;padding-top:1px}
+.timeline-mark{width:10px;height:10px;border-radius:50%;background:var(--blue);margin-top:4px;z-index:1;box-shadow:0 0 0 3px #fff}
+.timeline-node.alert-node .timeline-mark{background:var(--red)}
+.timeline-content b{font-size:13px}.timeline-content p{font-size:11px;color:#5A6A7F;margin-top:2px}
+.snapshot-link{display:inline-block;margin-top:5px;color:var(--blue);font-size:11px;font-weight:750;text-decoration:none}
+.history-note{margin:15px 20px 0;padding:10px 12px;border-radius:8px;background:var(--gold-soft);color:#714500;font-size:12px;font-weight:650}
+.history-state{padding:48px 20px;text-align:center;color:#56667C;font-size:13px}
+
 .empty{padding:28px 20px;text-align:center;color:#56667C;font-size:14px;font-weight:650;
   border-top:1px solid #F0F1EE}
 
@@ -152,6 +205,7 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
   .bays{grid-template-columns:repeat(3,1fr)}
   .vehs{grid-template-columns:1fr}
   .cols{grid-template-columns:1fr}
+  .history-filters{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:560px){
   .bays{grid-template-columns:repeat(2,1fr)}
@@ -159,6 +213,12 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
   .wrap{padding:16px 12px 48px}
   .section-block{padding:16px}
   .sec-h{align-items:flex-start;flex-wrap:wrap}
+  .view-nav{width:100%}.view-nav button{flex:1}
+  .history-head{display:block}.history-head p{margin-top:7px}
+  .history-filters{grid-template-columns:1fr 1fr;padding:15px 14px}
+  .filter-actions{grid-column:1/-1}.filter-actions button{flex:1}
+  .history-grid{grid-template-columns:1fr}
+  .history-list{max-height:none}
 }
 </style>
 </head>
@@ -175,6 +235,13 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
   <span class="clockbox" id="clock">--:--:--</span>
   <div class="livechip" id="livechip"><i></i><span id="livetext">CONNECTING</span></div>
 </header>
+
+<div class="view-nav" role="tablist" aria-label="Primary views / 主要视图">
+  <button id="view-dashboard" type="button" role="tab" data-view="dashboard" aria-selected="true" data-i18n="liveDashboard">Live dashboard</button>
+  <button id="view-history" type="button" role="tab" data-view="history" aria-selected="false" data-i18n="historyCentre">History centre</button>
+</div>
+
+<main id="dashboard-view">
 
 <div class="kpis">
   <div class="kpi money">
@@ -228,6 +295,31 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
   <div class="sec-h"><h2 data-i18n="devicesTitle">Devices</h2><span class="zh" data-i18n="deviceHint">Offline after 60s without heartbeat</span><span class="sp"></span></div>
   <div class="cams" id="cams"></div>
 </div>
+</main>
+
+<main id="history-view" hidden>
+  <div class="history-head">
+    <div><h1 data-i18n="staffHistory">Staff history</h1><p data-i18n="historyScope">Verified camera and area observations, without inferred walking routes.</p></div>
+  </div>
+  <form class="history-filters" id="history-form">
+    <div class="filter-field"><label for="history-from" data-i18n="fromDate">From date</label><input id="history-from" type="date" required></div>
+    <div class="filter-field"><label for="history-to" data-i18n="toDate">To date</label><input id="history-to" type="date" required></div>
+    <div class="filter-field"><label for="history-employee" data-i18n="employee">Employee</label><select id="history-employee"><option value="" data-i18n="allEmployees">All employees</option></select></div>
+    <div class="filter-field"><label for="history-camera" data-i18n="camera">Camera</label><select id="history-camera"><option value="" data-i18n="allCameras">All cameras</option></select></div>
+    <div class="filter-field"><label for="history-area" data-i18n="area">Area</label><select id="history-area"><option value="" data-i18n="allAreas">All areas</option></select></div>
+    <label class="check-field"><input id="history-alerts" type="checkbox"><span data-i18n="alertsOnly">With safety alerts</span></label>
+    <div class="filter-actions"><button class="primary" type="submit" data-i18n="search">Search</button><button type="button" id="history-reset" data-i18n="reset">Reset</button></div>
+  </form>
+  <div class="history-grid">
+    <section class="history-panel" aria-labelledby="history-results-title">
+      <div class="history-panel-head"><b id="history-results-title" data-i18n="visitResults">Employee results</b><span id="history-count">0</span></div>
+      <div class="history-list" id="history-list"><div class="history-state" data-i18n="historyIdle">Choose a date range to search.</div></div>
+    </section>
+    <section class="history-panel history-detail" id="history-detail" aria-live="polite">
+      <div class="history-state" data-i18n="selectEmployee">Select an employee to view the timeline.</div>
+    </section>
+  </div>
+</main>
 
 <footer>
   <span class="pdpa"><i></i><span data-i18n="privacy">PDPA compliant, staff notified of workplace monitoring</span></span>
@@ -238,6 +330,7 @@ footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;f
 
 <script>
 const API = "/api/v1/dashboard";
+const HISTORY_API = "/api/v1/history/person-visits";
 // 文案为 [English, 中文]；API 枚举、姓名、车牌与设备编号保持原值。
 const I18N = {
   title:["Workshop OS · Owner's Desk","Workshop OS · 老板经营台"],
@@ -273,12 +366,25 @@ const I18N = {
   DANGER_ZONE:["Danger zone intrusion","闯入危险区"], FALL_DOWN:["Fall detected","人员倒地"],
   GATHERING:["Gathering","人员聚集"], LOITERING:["Loitering","人员滞留"],
   "Senior Mechanic":["Senior Mechanic","高级维修技师"], "Mechanic":["Mechanic","维修技师"],
-  "Service Advisor":["Service Advisor","服务顾问"], "Panel Beater":["Panel Beater","钣金技师"]
+  "Service Advisor":["Service Advisor","服务顾问"], "Panel Beater":["Panel Beater","钣金技师"],
+  viewNavigation:["Primary views","主要视图"], liveDashboard:["Live dashboard","实时看板"], historyCentre:["History centre","历史中心"],
+  staffHistory:["Staff history","员工历史"], historyScope:["Verified camera and area observations, without inferred walking routes.","仅展示已核实的摄像头与区域观测，不推测行走路线。"],
+  fromDate:["From date","开始日期"], toDate:["To date","结束日期"], employee:["Employee","员工"], camera:["Camera","摄像头"], area:["Area","区域"],
+  allEmployees:["All employees","全部员工"], allCameras:["All cameras","全部摄像头"], allAreas:["All areas","全部区域"],
+  alertsOnly:["With safety alerts","仅看安全告警"], search:["Search","查询"], reset:["Reset","重置"], visitResults:["Employee results","员工结果"],
+  historyIdle:["Choose a date range to search.","请选择日期范围后查询。"], selectEmployee:["Select an employee to view the timeline.","选择员工后查看时间线。"],
+  loading:["Loading...","正在加载..."], noHistory:["No matching staff history","没有符合条件的员工历史"], resultCount:["{n} employee(s)","{n} 名员工"],
+  observedDuration:["Observed duration","记录时长"], observations:["{n} observations","{n} 个观测节点"], segments:["{n} camera segment(s)","{n} 个摄像头轨迹段"],
+  alertsCount:["{n} alert(s)","{n} 次告警"], dataGaps:["{n} incomplete segment(s)","{n} 个轨迹段缺少进出事件"],
+  timeline:["Observation timeline","观测时间线"], viewSnapshot:["View alert snapshot","查看告警抓拍"], unknownArea:["Area not reported","未上报区域"],
+  PERSON_ENTER:["Entered camera view","进入摄像头视野"], PERSON_LEAVE:["Left camera view","离开摄像头视野"],
+  IDENTITY_UPDATE:["Identity confirmed","身份已确认"], BEHAVIOR:["Safety event","安全行为事件"], historyFailed:["History query failed","历史查询失败"]
 };
 let language = "en", lastDashboard = null, connectionState = "connecting";
+let activeView = "dashboard", historyResults = [], historyDetail = null, historyMeta = null, selectedIdentity = "";
 try { if(localStorage.getItem("workshop-language") === "zh") language = "zh"; } catch(e) { /* 存储不可用时仍可切换 */ }
 function t(key, values = {}){
-  const value = I18N[key]?.[language === "zh" ? 1 : 0] ?? key;
+  const value = I18N[key]?.[language === "zh" ? 1 : 0] ?? String(key ?? "");
   return value.replace(/\{(\w+)\}/g, (match, name) => values[name] ?? match);
 }
 function updateConnection(state){
@@ -295,6 +401,7 @@ function setLanguage(next){
   document.querySelectorAll("[data-lang]").forEach(el => el.setAttribute("aria-pressed", String(el.dataset.lang === language)));
   updateConnection(connectionState);
   if(lastDashboard) render(lastDashboard);
+  renderHistory();
 }
 
 const $ = id => document.getElementById(id);
@@ -310,6 +417,17 @@ function fmtHM(iso){
   if(!iso) return "--:--";
   const d = new Date(iso);
   return pad(d.getHours()) + ":" + pad(d.getMinutes());
+}
+function fmtDateTime(iso){
+  if(!iso) return "-";
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+function esc(value){
+  return String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+}
+function localDateValue(d){
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
 
 async function refresh(){
@@ -418,6 +536,126 @@ function render(d){
       <small>${c.status==="ONLINE" ? Math.round(c.fps)+" "+t("fps") : t("offline")}</small></div>`).join("");
 }
 
+function historyParams(includeIdentity = true){
+  const fromValue = $("history-from").value;
+  const toValue = $("history-to").value;
+  const from = new Date(`${fromValue}T00:00:00`);
+  const to = new Date(`${toValue}T23:59:59.999`);
+  const params = new URLSearchParams({from:from.toISOString(), to:to.toISOString()});
+  if(includeIdentity && $("history-employee").value) params.set("identity_id", $("history-employee").value);
+  if($("history-camera").value) params.set("camera_id", $("history-camera").value);
+  if($("history-area").value) params.set("area_id", $("history-area").value);
+  if($("history-alerts").checked) params.set("alert_only", "1");
+  return params;
+}
+
+function fillSelect(id, items, valueKey, labelFn, allKey){
+  const select = $(id), current = select.value;
+  select.innerHTML = `<option value="">${esc(t(allKey))}</option>` + items.map(item=>
+    `<option value="${esc(valueKey ? item[valueKey] : item)}">${esc(labelFn(item))}</option>`).join("");
+  if([...select.options].some(option => option.value === current)) select.value = current;
+}
+
+function renderHistoryMeta(){
+  if(!historyMeta) return;
+  fillSelect("history-employee", historyMeta.employees||[], "identity_id", item=>`${item.name || item.identity_id} · ${item.employee_no || item.identity_id}`, "allEmployees");
+  fillSelect("history-camera", historyMeta.cameras||[], "", item=>item, "allCameras");
+  fillSelect("history-area", historyMeta.areas||[], "", item=>item, "allAreas");
+}
+
+function renderHistory(){
+  renderHistoryMeta();
+  if(!historyResults.length){
+    $("history-count").textContent = t("resultCount", {n:0});
+    if(historyMeta) $("history-list").innerHTML = `<div class="history-state">${esc(t("noHistory"))}</div>`;
+  }else{
+    $("history-count").textContent = t("resultCount", {n:historyResults.length});
+    $("history-list").innerHTML = historyResults.map(item=>{
+      const title = item.name || item.identity_id;
+      const active = item.identity_id === selectedIdentity;
+      return `<button type="button" class="history-person ${active?"active":""}" data-identity="${esc(item.identity_id)}" aria-pressed="${active}">
+        <span class="person-top"><b>${esc(title)}</b><span>${esc(fmtHM(item.first_seen))} - ${esc(fmtHM(item.last_seen))}</span></span>
+        <span class="person-no">${esc(item.employee_no || item.identity_id)}${item.role?" · "+esc(t(item.role)):""}</span>
+        <span class="person-meta"><span>${esc(t("observations", {n:item.event_count}))}</span><span>${esc(t("segments", {n:item.segment_count}))}</span>
+          ${item.alert_count?`<span class="alert-count">${esc(t("alertsCount", {n:item.alert_count}))}</span>`:""}</span>
+      </button>`;
+    }).join("");
+  }
+
+  if(!historyDetail){
+    $("history-detail").innerHTML = `<div class="history-state">${esc(t("selectEmployee"))}</div>`;
+    return;
+  }
+  const summary = historyDetail.summary, nodes = historyDetail.nodes || [];
+  $("history-detail").innerHTML = `<div class="history-panel-head"><b>${esc(t("timeline"))}</b><span>${esc(fmtDateTime(summary.first_seen))}</span></div>
+    <div class="history-identity"><h2>${esc(summary.name || summary.identity_id)}</h2>
+      <p>${esc(summary.employee_no || summary.identity_id)}${summary.role?" · "+esc(t(summary.role)):""}</p>
+      <div class="history-stats"><div><b>${esc(fmtDur(summary.duration_sec))}</b>${esc(t("observedDuration"))}</div>
+        <div><b>${summary.event_count}</b>${esc(t("observations", {n:summary.event_count}))}</div>
+        <div><b>${summary.alert_count}</b>${esc(t("alertsCount", {n:summary.alert_count}))}</div></div></div>
+    ${summary.incomplete_segments?`<div class="history-note">${esc(t("dataGaps", {n:summary.incomplete_segments}))}</div>`:""}
+    <div class="timeline">${nodes.map(node=>{
+      const isAlert = node.event_type === "BEHAVIOR";
+      const title = isAlert && node.behavior ? t(node.behavior) : t(node.event_type);
+      const place = [node.area_id || t("unknownArea"), node.camera_id, node.track_id].filter(Boolean).join(" · ");
+      return `<div class="timeline-node ${isAlert?"alert-node":""}"><div class="timeline-time">${esc(fmtHM(node.occur_time))}</div><span class="timeline-mark"></span>
+        <div class="timeline-content"><b>${esc(title)}</b><p>${esc(place)}</p>
+          ${node.snapshot_url?`<a class="snapshot-link" href="${esc(node.snapshot_url)}" target="_blank" rel="noopener">${esc(t("viewSnapshot"))}</a>`:""}</div></div>`;
+    }).join("")}</div>`;
+}
+
+async function loadHistoryDetail(identityID){
+  selectedIdentity = identityID;
+  historyDetail = null;
+  renderHistory();
+  $("history-detail").innerHTML = `<div class="history-state">${esc(t("loading"))}</div>`;
+  try{
+    const params = historyParams(false);
+    const res = await fetch(`${HISTORY_API}/${encodeURIComponent(identityID)}?${params}`);
+    const j = await res.json();
+    if(j.code !== 0) throw new Error(j.message);
+    historyDetail = j.data;
+    renderHistory();
+  }catch(e){
+    $("history-detail").innerHTML = `<div class="history-state">${esc(t("historyFailed"))}</div>`;
+  }
+}
+
+async function queryHistory(){
+  historyDetail = null;
+  historyResults = [];
+  $("history-list").innerHTML = `<div class="history-state">${esc(t("loading"))}</div>`;
+  $("history-detail").innerHTML = `<div class="history-state">${esc(t("selectEmployee"))}</div>`;
+  try{
+    const res = await fetch(`${HISTORY_API}?${historyParams()}`);
+    const j = await res.json();
+    if(j.code !== 0) throw new Error(j.message);
+    historyResults = j.data.list || [];
+    historyMeta = j.data.filters || historyMeta;
+    $("clock").textContent = (j.data.server_time || "").slice(11,19);
+    updateConnection("live");
+    selectedIdentity = historyResults.some(item=>item.identity_id===selectedIdentity) ? selectedIdentity : (historyResults[0]?.identity_id || "");
+    renderHistory();
+    if(selectedIdentity) await loadHistoryDetail(selectedIdentity);
+  }catch(e){
+    historyMeta = historyMeta || {};
+    updateConnection("disconnected");
+    renderHistory();
+    $("history-list").innerHTML = `<div class="history-state">${esc(t("historyFailed"))}</div>`;
+  }
+}
+
+function setView(view){
+  activeView = view === "history" ? "history" : "dashboard";
+  $("dashboard-view").hidden = activeView !== "dashboard";
+  $("history-view").hidden = activeView !== "history";
+  $("view-dashboard").setAttribute("aria-selected", String(activeView === "dashboard"));
+  $("view-history").setAttribute("aria-selected", String(activeView === "history"));
+  if(typeof location !== "undefined" && location.hash !== `#${activeView}` && typeof history !== "undefined") history.replaceState(null, "", `#${activeView}`);
+  if(activeView === "history" && !historyMeta) queryHistory();
+  if(activeView === "dashboard") refresh();
+}
+
 /* 人工修正 */
 async function overrideSpot(spotId){
   const cur = prompt(t("overridePrompt", {id:spotId}), language === "zh" ? "空闲" : "FREE");
@@ -438,9 +676,24 @@ async function overrideSpot(spotId){
 }
 
 document.querySelectorAll("[data-lang]").forEach(el => el.addEventListener("click", () => setLanguage(el.dataset.lang)));
+$("view-dashboard").addEventListener("click", () => setView("dashboard"));
+$("view-history").addEventListener("click", () => setView("history"));
+$("history-form").addEventListener("submit", event=>{ event.preventDefault(); queryHistory(); });
+$("history-reset").addEventListener("click", ()=>{
+  const today = localDateValue(new Date());
+  $("history-from").value = today; $("history-to").value = today;
+  $("history-employee").value = ""; $("history-camera").value = ""; $("history-area").value = ""; $("history-alerts").checked = false;
+  queryHistory();
+});
+$("history-list").addEventListener("click", event=>{
+  const button = event.target.closest("[data-identity]");
+  if(button) loadHistoryDetail(button.dataset.identity);
+});
+const initialDate = localDateValue(new Date());
+$("history-from").value = initialDate; $("history-to").value = initialDate;
 setLanguage(language);
-refresh();
-setInterval(refresh, 3000);
+setView(typeof location !== "undefined" && location.hash === "#history" ? "history" : "dashboard");
+setInterval(()=>{ if(activeView === "dashboard") refresh(); }, 3000);
 </script>
 </body>
 </html>

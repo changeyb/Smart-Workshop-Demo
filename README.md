@@ -1,8 +1,8 @@
 # Workshop Server · 维修车间智能监控服务端（MVP）
 
-Go 单体 + SQLite（WAL）+ `go:embed` 内嵌看板页面。对接算法侧事件上报，提供实时看板。
+Go 单体 + SQLite（WAL）+ `go:embed` 内嵌看板页面。对接算法侧事件上报，提供实时看板和员工历史轨迹查询。
 
-看板右上角支持 EN / 中文切换，默认英文；浏览器会记住选择。标题、状态、告警、时长与人工修正提示同步切换，姓名、车牌和设备编号保持原样。语言回归测试：`node --test scripts/test_i18n.mjs`（使用 Node.js 内置测试工具，无额外依赖）。
+页面支持“实时看板 / 历史中心”切换及 EN / 中文切换，浏览器会记住语言选择。历史中心可按日期、员工、摄像头、区域和安全告警查询，以事件时间线展示已核实的观测轨迹，不推断跨摄像头的连续行走路线。语言回归测试：`node --test scripts/test_i18n.mjs`（使用 Node.js 内置测试工具，无额外依赖）。
 
 ## 快速开始
 
@@ -38,6 +38,8 @@ go build -o workshop-server .
 | POST | `/api/v1/heartbeat` | 边缘设备心跳 + 摄像头状态 + 时钟偏差检测 |
 | GET | `/api/v1/dashboard` | 看板聚合（人员/车辆/车位/告警/统计） |
 | GET | `/api/v1/events` | 事件历史查询（event_type / camera_id / track_id / identity_id / 时间范围 / 分页） |
+| GET | `/api/v1/history/person-visits` | 员工历史汇总（identity_id / camera_id / area_id / alert_only / 时间范围） |
+| GET | `/api/v1/history/person-visits/{identity_id}` | 单个员工的观测时间线 |
 | POST | `/api/v1/spots/{spot_id}/override` | 车位人工修正（自动落 OPERATOR_OVERRIDE 事件） |
 
 鉴权已取消：所有接口均无需 `Authorization`，旧的 `WS_TOKEN` 环境变量不再生效。能访问服务的人都可读取数据、上报事件和人工修改车位。本机使用建议设置 `WS_ADDR=127.0.0.1:8080`。本次按用户明确要求开放公网演示，所有访问者均可读写，不应存放真实人员信息或敏感截图；正式生产应另行限制访问。
@@ -59,6 +61,7 @@ workshop-server/
 ├── db.go            # SQLite(WAL) 初始化、表结构、种子数据
 ├── handlers.go      # 事件上报 / 心跳 / 人工修正 / 事件查询
 ├── aggregate.go     # 看板聚合：在场推导、统计、告警
+├── history.go       # 员工轨迹分段、身份回填与历史查询
 ├── static/index.html  # 看板页面（方案 D，3 秒轮询 /api/v1/dashboard）
 ├── scripts/simulate.sh  # 模拟算法侧上报的联调脚本
 └── data/            # 运行时生成：workshop.db + snapshots/
