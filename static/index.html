@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop OS · Owner's Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F5F2; --card:#FFFFFF; --ink:#17211B; --mid:#6B736E; --faint:#A9AFAB;
+  --green:#0E7A4A; --green-soft:#E3F2EA; --gold:#C77D0A; --gold-soft:#FBF0DC;
+  --red:#D23B2F; --red-soft:#FBE7E4; --blue:#2563EB; --line:#E4E6E1;
+  --mono:'JetBrains Mono','PingFang SC','Microsoft YaHei',monospace;
+  --sans:'Inter','PingFang SC','Microsoft YaHei',sans-serif;
+  --r:16px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+::selection{background:var(--green);color:#fff}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 24px 64px}
+
+header{display:flex;align-items:center;gap:14px;padding:6px 0 20px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;letter-spacing:-.01em}
+.logo .mark{width:34px;height:34px;border-radius:10px;background:var(--green);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px}
+.logo small{display:block;font-size:10.5px;color:var(--mid);font-weight:500;letter-spacing:.04em}
+.hr{flex:1}
+.lang{display:flex;background:#E7E9E4;border-radius:99px;padding:3px;flex:none}
+.lang button{border:0;background:transparent;color:var(--mid);padding:5px 13px;border-radius:99px;
+  font:600 12px var(--sans);cursor:pointer}
+.lang button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.lang button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.livechip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:var(--green);
+  background:var(--green-soft);border-radius:99px;padding:7px 14px}
+.livechip i{width:7px;height:7px;border-radius:50%;background:var(--green);animation:p 1.6s infinite}
+.livechip.err{color:var(--red);background:var(--red-soft)}
+.livechip.err i{background:var(--red)}
+@keyframes p{50%{opacity:.3}}
+.clockbox{font-family:var(--mono);font-size:13px;color:var(--mid);font-weight:500}
+
+.kpis{display:grid;grid-template-columns:1.35fr 1fr 1fr 1fr;gap:14px}
+.kpi{background:var(--card);border-radius:var(--r);padding:20px 22px;border:1px solid var(--line)}
+.kpi .cap{font-size:12px;color:var(--mid);font-weight:600}
+.kpi .big{font-size:32px;font-weight:800;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi .big small{font-size:15px;color:var(--mid);font-weight:600}
+.kpi .sub{font-size:11.5px;margin-top:6px;font-weight:600}
+.kpi.money{background:var(--ink);color:#fff;border-color:var(--ink)}
+.kpi.money .cap{color:#9AA79F}
+.kpi.money .sub{color:#7FBF9B}
+.sub.up{color:var(--green)} .sub.warn{color:var(--gold)} .sub.bad{color:var(--red)}
+.barmeter{height:6px;background:#EDEFEA;border-radius:3px;margin-top:12px;overflow:hidden}
+.barmeter i{display:block;height:100%;background:var(--green);border-radius:3px;transition:width .8s cubic-bezier(.22,1,.36,1)}
+
+.sec{margin-top:26px}
+.sec-h{display:flex;align-items:center;gap:10px;margin:0 2px 13px}
+.sec-h h2{font-size:16px;font-weight:800}
+.sec-h .zh{font-size:11px;color:var(--faint);font-weight:500}
+.sec-h .cnt{font-size:11px;font-weight:700;color:var(--mid);background:#fff;border:1px solid var(--line);
+  border-radius:99px;padding:2px 10px}
+.sec-h .sp{flex:1}
+
+.bays{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.bay{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;
+  min-height:112px;display:flex;flex-direction:column;position:relative;cursor:pointer}
+.bay .bid{font-size:11px;font-weight:700;color:var(--faint);letter-spacing:.06em}
+.bay .plate{font-weight:800;font-size:15px;margin-top:auto;letter-spacing:.02em}
+.bay .timer{font-family:var(--mono);font-size:12px;font-weight:700;margin-top:2px}
+.bay .st{font-size:11px;margin-top:3px;display:flex;align-items:center;gap:5px;font-weight:600}
+.bay .st i{width:7px;height:7px;border-radius:50%}
+.bay.free{background:transparent;border-style:dashed;border-color:#D5D8D2}
+.bay.free .plate{color:var(--faint);font-weight:600;font-size:13px}
+.bay.free .st{color:var(--green)} .bay.free .st i{background:var(--green)}
+.bay.busy .st{color:var(--blue)} .bay.busy .st i{background:var(--blue)}
+.bay.busy .timer{color:var(--blue)}
+.bay.over{border-color:#EFC892;background:var(--gold-soft)}
+.bay.over .st{color:var(--gold)} .bay.over .st i{background:var(--gold)}
+.bay.over .timer{color:var(--gold)}
+.bay.over::after{content:attr(data-over-label);position:absolute;top:11px;right:11px;font-size:8.5px;
+  font-weight:800;letter-spacing:.08em;color:var(--gold)}
+.bay.blk .st{color:var(--red)} .bay.blk .st i{background:var(--red)}
+.bay.blk .plate{font-size:12px;color:var(--red);font-weight:600}
+.bay .ovr{position:absolute;bottom:10px;right:12px;font-size:9px;color:var(--faint);font-weight:600}
+
+.cols{display:grid;grid-template-columns:1.15fr .85fr;gap:14px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.card .c-head{display:flex;align-items:center;justify-content:space-between;padding:15px 20px 11px}
+.card .c-head b{font-size:14px;font-weight:800}
+.card .c-head span{font-size:11px;color:var(--mid);font-weight:600}
+
+.staff{display:flex;align-items:center;gap:12px;padding:10px 20px;border-top:1px solid #F0F1EE}
+.avatar{width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:13px;background:var(--green-soft);color:var(--green)}
+.staff.stranger .avatar{background:var(--red-soft);color:var(--red)}
+.staff.unresolved .avatar{background:#EEF0EC;color:var(--mid)}
+.staff .who b{font-size:14px;display:flex;align-items:center;gap:8px}
+.staff .who span{font-size:11px;color:var(--mid)}
+.staff .right{margin-left:auto;text-align:right}
+.staff .dur{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums}
+.staff .dur small{display:block;font-size:10px;color:var(--mid);font-weight:500}
+.role{font-size:10px;font-weight:700;border-radius:99px;padding:2px 8px;background:#EFF1ED;color:var(--mid)}
+.role.warn{background:var(--red-soft);color:var(--red)}
+.role.pend{background:var(--gold-soft);color:var(--gold)}
+
+.alert{display:flex;gap:11px;padding:11px 20px;border-top:1px solid #F0F1EE;align-items:flex-start}
+.alert .dot{flex:none;width:8px;height:8px;border-radius:50%;margin-top:6px;background:var(--gold)}
+.alert.l2 .dot{background:var(--red);box-shadow:0 0 0 3px rgba(210,59,47,.15)}
+.alert .body b{font-size:13px;display:block;font-weight:700}
+.alert .body span{font-size:11px;color:var(--mid)}
+.alert .side{margin-left:auto;text-align:right;flex:none}
+.alert .tm{font-size:11px;color:var(--mid);font-variant-numeric:tabular-nums}
+.alert.l2 b{color:var(--red)}
+
+.vehs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.veh{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px}
+.veh .top{display:flex;align-items:center;gap:10px}
+.veh .vplate{font-weight:800;font-size:17px;letter-spacing:.02em}
+.veh .vplate.none{color:var(--gold);font-size:12.5px}
+.veh .eta{margin-left:auto;font-size:10px;font-weight:800;letter-spacing:.06em;border-radius:99px;padding:3px 9px}
+.eta.ok{background:var(--green-soft);color:var(--green)}
+.eta.soon{background:var(--gold-soft);color:var(--gold)}
+.veh .vmeta{display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:var(--mid)}
+.veh .vmeta b{display:block;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:700}
+
+.cams{display:flex;gap:10px;flex-wrap:wrap}
+.camchip{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);
+  border-radius:99px;padding:8px 15px;font-size:12px;font-weight:600}
+.camchip i{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.camchip.off{color:var(--red)} .camchip.off i{background:var(--red)}
+.camchip small{color:var(--mid);font-weight:500}
+
+.empty{padding:26px 20px;text-align:center;color:var(--faint);font-size:12.5px;
+  border-top:1px solid #F0F1EE}
+
+footer{margin-top:30px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mid)}
+.pdpa{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);
+  border-radius:99px;padding:6px 13px;font-weight:600}
+.pdpa i{width:7px;height:7px;border-radius:50%;background:var(--green)}
+
+@media(max-width:960px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .bays{grid-template-columns:repeat(4,1fr)}
+  .vehs{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .bays{grid-template-columns:repeat(2,1fr)}
+  .kpi .big{font-size:26px}
+  .wrap{padding:16px 14px 48px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="logo"><span class="mark">W</span><div>Workshop OS<small data-i18n="subtitle">OWNER'S DESK</small></div></div>
+  <span class="hr"></span>
+  <div class="lang" role="group" aria-label="Language / 语言">
+    <button type="button" lang="en" data-lang="en" aria-pressed="true">EN</button>
+    <button type="button" lang="zh-CN" data-lang="zh" aria-pressed="false">中文</button>
+  </div>
+  <span class="clockbox" id="clock">--:--:--</span>
+  <div class="livechip" id="livechip"><i></i><span id="livetext">CONNECTING</span></div>
+</header>
+
+<div class="kpis">
+  <div class="kpi money">
+    <div class="cap" data-i18n="vehiclesToday">VEHICLES TODAY</div>
+    <div class="big" id="k-veh">–</div>
+    <div class="sub" id="k-veh-sub">—</div>
+  </div>
+  <div class="kpi">
+    <div class="cap" data-i18n="utilisation">BAY UTILISATION</div>
+    <div class="big" id="k-util">–</div>
+    <div class="barmeter"><i id="util-bar" style="width:0"></i></div>
+    <div class="sub warn" id="k-util-sub"></div>
+  </div>
+  <div class="kpi">
+    <div class="cap" data-i18n="avgService">AVG SERVICE TIME</div>
+    <div class="big" id="k-avg">–</div>
+    <div class="sub up" id="k-avg-sub"></div>
+  </div>
+  <div class="kpi">
+    <div class="cap" data-i18n="staffTitle">Staff on Floor</div>
+    <div class="big" id="k-staff">–</div>
+    <div class="sub" id="k-staff-sub"></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h"><h2 data-i18n="baysTitle">Workshop Bays</h2><span class="zh" data-i18n="bayHint">Click a bay to override</span>
+    <span class="cnt" id="bay-cnt"></span><span class="sp"></span></div>
+  <div class="bays" id="bays"></div>
+</div>
+
+<div class="sec">
+  <div class="cols">
+    <div class="card">
+      <div class="c-head"><b data-i18n="staffTitle">Staff on Floor</b><span id="p-cnt"></span></div>
+      <div id="staff"></div>
+    </div>
+    <div class="card">
+      <div class="c-head"><b data-i18n="alertsTitle">Safety Alerts</b><span data-i18n="latest">latest 20</span></div>
+      <div id="alerts"></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-h"><h2 data-i18n="vehiclesTitle">Vehicles in Workshop</h2><span class="sp"></span></div>
+  <div class="vehs" id="vehs"></div>
+</div>
+
+<div class="sec">
+  <div class="sec-h"><h2 data-i18n="devicesTitle">Devices</h2><span class="zh" data-i18n="deviceHint">Offline after 60s without heartbeat</span><span class="sp"></span></div>
+  <div class="cams" id="cams"></div>
+</div>
+
+<footer>
+  <span class="pdpa"><i></i><span data-i18n="privacy">PDPA compliant — staff notified of workplace monitoring</span></span>
+  <span data-i18n="edgeData">Face recognition data stays on edge device</span>
+</footer>
+
+</div>
+
+<script>
+const API = "/api/v1/dashboard";
+// 文案为 [English, 中文]；API 枚举、姓名、车牌与设备编号保持原值。
+const I18N = {
+  title:["Workshop OS · Owner's Desk","Workshop OS · 老板经营台"],
+  subtitle:["OWNER'S DESK","老板经营台 · 车间智能监控"],
+  vehiclesToday:["VEHICLES TODAY","今日进出台次"], utilisation:["BAY UTILISATION","工位利用率"],
+  avgService:["AVG SERVICE TIME","平均维修时长"], staffTitle:["Staff on Floor","在场人员"],
+  baysTitle:["Workshop Bays","工位实况"], bayHint:["Click a bay to override","点击卡片可人工修正"],
+  alertsTitle:["Safety Alerts","安全告警"], latest:["latest 20","最近 20 条"],
+  vehiclesTitle:["Vehicles in Workshop","在场车辆"], devicesTitle:["Devices","设备状态"],
+  deviceHint:["Offline after 60s without heartbeat","摄像头 60 秒无心跳判离线"],
+  privacy:["PDPA compliant — staff notified of workplace monitoring","符合 PDPA — 已告知员工工作场所监控"],
+  edgeData:["Face recognition data stays on edge device","人脸识别数据保留在边缘设备，不出本地"],
+  connecting:["CONNECTING","连接中"], live:["LIVE","实时在线"], disconnected:["DISCONNECTED","连接已断开"],
+  in:["in","进场"], out:["out","出场"], vehiclesCount:["{n} currently in workshop","当前在场 {n} 辆"],
+  blockedCount:["{n} bay(s) blocked","{n} 个工位受阻"], noBlocked:["No bays blocked","无受阻工位"],
+  completed:["today, completed jobs","今日已完成车辆"], noCompleted:["no completed jobs yet","今日暂无完成车辆"],
+  pax:["pax","人"], strangers:["{n} stranger(s) detected","发现 {n} 名陌生人"],
+  pendingCount:["{n} unresolved","{n} 人待识别"], allIdentified:["all identified","均已识别"],
+  bayCount:["{n} bays","{n} 个工位"], available:["Available","可用"], free:["Free","空闲"],
+  blocked:["Blocked","受阻"], unclear:["Object / unclear","物品遮挡 / 状态不明"], manual:["manual ✓","人工修正 ✓"],
+  over:["Over target","已超时"], overBadge:["OVER TARGET","超过目标时长"], service:["In service","维修中"],
+  present:["{n} present","{n} 人在场"], unknown:["Unknown person","陌生人"], identifying:["Identifying…","识别中…"],
+  staff:["STAFF","员工"], stranger:["STRANGER","陌生人"], pending:["PENDING","待识别"],
+  confirm:["to confirm","待确认"], floor:["on floor","在场时长"], noPeople:["No one on the floor","暂无在场人员"],
+  noAlerts:["No alerts","暂无告警"], platePending:["Plate pending…","车牌待识别…"], checkIn:["CHECK-IN","刚入场"],
+  elapsed:["elapsed","已停留"], entryTime:["entry time","入场时间"], noVehicles:["No vehicles","暂无在场车辆"],
+  offline:["OFFLINE","离线"], fps:["FPS","帧/秒"], sec:["s","秒"], min:["m","分"], hour:["h","小时"],
+  overridePrompt:["Manual override for {id}\nEnter status: FREE / OCCUPIED / BLOCKED","人工修正工位 {id}\n请输入：空闲 / 占用 / 受阻（也支持 FREE / OCCUPIED / BLOCKED）"],
+  invalidStatus:["Invalid status. Use FREE / OCCUPIED / BLOCKED.","状态无效，请输入：空闲 / 占用 / 受阻。"],
+  failed:["Operation failed","操作失败"], requestFailed:["Request failed. Please check your connection.","请求失败，请检查网络连接。"],
+  "invalid body or status":["Invalid body or status","请求或工位状态无效"], "unknown spot_id":["Unknown bay","工位不存在"],
+  NO_HELMET:["No helmet","未戴安全帽"], NO_VEST:["No vest","未穿背心"],
+  DANGER_ZONE:["Danger zone intrusion","闯入危险区"], FALL_DOWN:["Fall detected","人员倒地"],
+  GATHERING:["Gathering","人员聚集"], LOITERING:["Loitering","人员滞留"],
+  "Senior Mechanic":["Senior Mechanic","高级维修技师"], "Mechanic":["Mechanic","维修技师"],
+  "Service Advisor":["Service Advisor","服务顾问"], "Panel Beater":["Panel Beater","钣金技师"]
+};
+let language = "en", lastDashboard = null, connectionState = "connecting";
+try { if(localStorage.getItem("workshop-language") === "zh") language = "zh"; } catch(e) { /* 存储不可用时仍可切换 */ }
+function t(key, values = {}){
+  const value = I18N[key]?.[language === "zh" ? 1 : 0] ?? key;
+  return value.replace(/\{(\w+)\}/g, (match, name) => values[name] ?? match);
+}
+function updateConnection(state){
+  connectionState = state;
+  $("livechip").classList.toggle("err", state === "disconnected");
+  $("livetext").textContent = t(state);
+}
+function setLanguage(next){
+  language = next === "zh" ? "zh" : "en";
+  try { localStorage.setItem("workshop-language", language); } catch(e) { /* 不阻断页面 */ }
+  document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+  document.title = t("title");
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
+  document.querySelectorAll("[data-lang]").forEach(el => el.setAttribute("aria-pressed", String(el.dataset.lang === language)));
+  updateConnection(connectionState);
+  if(lastDashboard) render(lastDashboard);
+}
+
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2,"0");
+
+function fmtDur(sec){
+  sec = Math.max(0, Math.floor(sec));
+  if(sec < 60) return sec + t("sec");
+  if(sec < 3600) return Math.floor(sec/60) + t("min");
+  return Math.floor(sec/3600) + t("hour") + " " + pad(Math.floor(sec%3600/60)) + t("min");
+}
+function fmtHM(iso){
+  if(!iso) return "--:--";
+  const d = new Date(iso);
+  return pad(d.getHours()) + ":" + pad(d.getMinutes());
+}
+
+async function refresh(){
+  try{
+    const res = await fetch(API);
+    const j = await res.json();
+    if(j.code !== 0) throw new Error(j.message);
+    lastDashboard = j.data;
+    render(lastDashboard);
+    updateConnection("live");
+  }catch(e){
+    updateConnection("disconnected");
+  }
+}
+
+function render(d){
+  const st = d.stats || {};
+  const spots = d.spots || [];
+  const persons = d.persons_present || [];
+  const vehs = d.vehicles_present || [];
+  const alerts = d.recent_alerts || [];
+  const cams = d.cameras || [];
+
+  /* clock */
+  $("clock").textContent = (d.server_time||"").slice(11,19);
+
+  /* KPI */
+  $("k-veh").innerHTML = `${st.vehicles_in_today??0}<small> ${t("in")}</small> / ${st.vehicles_out_today??0}<small> ${t("out")}</small>`;
+  $("k-veh-sub").textContent = t("vehiclesCount", {n:vehs.length});
+  const occ = st.spots_occupied ?? spots.filter(s=>s.status==="OCCUPIED").length;
+  const tot = st.spots_total ?? spots.length;
+  const rate = tot ? Math.round(occ/tot*100) : 0;
+  $("k-util").innerHTML = `${rate}%<small> ${occ}/${tot}</small>`;
+  $("util-bar").style.width = rate + "%";
+  const blk = spots.filter(s=>s.status==="BLOCKED").length;
+  $("k-util-sub").textContent = blk ? t("blockedCount", {n:blk}) : t("noBlocked");
+  const avg = st.avg_service_sec || 0;
+  $("k-avg").textContent = avg ? fmtDur(avg) : "–";
+  $("k-avg-sub").textContent = t(avg ? "completed" : "noCompleted");
+  $("k-staff").innerHTML = `${persons.length}<small> ${t("pax")}</small>`;
+  const strangers = persons.filter(p=>p.identity_status==="STRANGER").length;
+  const pending = persons.filter(p=>p.identity_status==="UNRESOLVED").length;
+  $("k-staff-sub").textContent = strangers ? t("strangers", {n:strangers}) : (pending ? t("pendingCount", {n:pending}) : t("allIdentified"));
+  $("k-staff-sub").className = "sub " + (strangers ? "bad" : "up");
+
+  /* bays */
+  $("bay-cnt").textContent = t("bayCount", {n:tot});
+  $("bays").innerHTML = spots.map(s=>{
+    if(s.status === "FREE")
+      return `<div class="bay free" onclick="overrideSpot('${s.spot_id}')"><div class="bid">${s.spot_id}</div>
+        <div class="plate">${t("available")}</div><div class="st"><i></i>${t("free")}</div>
+        ${s.overridden?`<span class="ovr">${t("manual")}</span>`:""}</div>`;
+    if(s.status === "BLOCKED")
+      return `<div class="bay blk" onclick="overrideSpot('${s.spot_id}')"><div class="bid">${s.spot_id}</div>
+        <div class="plate">${t("blocked")}</div><div class="st"><i></i>${t("unclear")}</div>
+        ${s.overridden?`<span class="ovr">${t("manual")}</span>`:""}</div>`;
+    const over = s.over_target;
+    return `<div class="bay ${over?"over":"busy"}" data-over-label="${t("overBadge")}" onclick="overrideSpot('${s.spot_id}')">
+      <div class="bid">${s.spot_id}</div>
+      <div class="plate">${s.plate_no||"—"}</div>
+      <div class="timer">${fmtDur(s.elapsed_sec||0)}</div>
+      <div class="st"><i></i>${t(over?"over":"service")}</div>
+      ${s.overridden?`<span class="ovr">${t("manual")}</span>`:""}</div>`;
+  }).join("");
+
+  /* staff */
+  $("p-cnt").textContent = t("present", {n:persons.length});
+  $("staff").innerHTML = persons.length ? persons.map(p=>{
+    const cls = p.identity_status==="STRANGER" ? "stranger" : p.identity_status==="UNRESOLVED" ? "unresolved" : "";
+    const name = p.name || t(p.identity_status==="STRANGER" ? "unknown" : "identifying");
+    const tag = p.identity_status==="IDENTIFIED" ? `<span class="role">${t("staff")}</span>`
+      : p.identity_status==="STRANGER" ? `<span class="role warn">${t("stranger")}</span>`
+      : `<span class="role pend">${t("pending")}</span>`;
+    const ini = p.name ? p.name.split(" ").map(w=>w[0]).slice(0,2).join("") : "?";
+    return `<div class="staff ${cls}">
+      <div class="avatar">${ini}</div>
+      <div class="who"><b>${name}${tag}</b>
+        <span>${p.role?t(p.role):p.track_id}${p.last_behavior?" · "+t(p.last_behavior):""}</span></div>
+      <div class="right"><div class="dur">${fmtDur(p.duration_sec)}<small>${t(p.stale?"confirm":"floor")}</small></div></div>
+    </div>`;
+  }).join("") : `<div class="empty">${t("noPeople")}</div>`;
+
+  /* alerts */
+  $("alerts").innerHTML = alerts.length ? alerts.map(a=>`
+    <div class="alert ${a.level===2?"l2":""}">
+      <span class="dot"></span>
+      <div class="body"><b>${t(a.behavior)}</b>
+        <span>${(a.target||"").replace(/^STRANGER(?= · )/, t("stranger"))} · ${a.camera_id||""}</span></div>
+      <div class="side"><div class="tm">${fmtHM(a.occur_time)}</div></div>
+    </div>`).join("") : `<div class="empty">${t("noAlerts")}</div>`;
+
+  /* vehicles */
+  $("vehs").innerHTML = vehs.length ? vehs.map(v=>{
+    const fresh = (v.duration_sec||0) < 300;
+    return `<div class="veh">
+      <div class="top"><span class="vplate ${v.plate_no?"":"none"}">${v.plate_no||t("platePending")}</span>
+        <span class="eta ${fresh?"ok":"soon"}">${t(fresh?"checkIn":"service")}</span></div>
+      <div class="vmeta"><div><b>${fmtDur(v.duration_sec)}</b>${t("elapsed")}</div>
+        <div style="text-align:right"><b style="font-size:12px">${fmtHM(v.enter_time)}</b>${t("entryTime")}</div></div>
+    </div>`;
+  }).join("") : `<div class="empty" style="grid-column:1/-1;border:none">${t("noVehicles")}</div>`;
+
+  /* cameras */
+  $("cams").innerHTML = cams.map(c=>`
+    <div class="camchip ${c.status==="ONLINE"?"":"off"}"><i></i>${c.camera_id}
+      <small>${c.status==="ONLINE" ? Math.round(c.fps)+" "+t("fps") : t("offline")}</small></div>`).join("");
+}
+
+/* 人工修正 */
+async function overrideSpot(spotId){
+  const cur = prompt(t("overridePrompt", {id:spotId}), language === "zh" ? "空闲" : "FREE");
+  if(!cur) return;
+  const input = cur.trim().toUpperCase();
+  const status = ({"空闲":"FREE","占用":"OCCUPIED","受阻":"BLOCKED"})[input] || input;
+  if(!["FREE","OCCUPIED","BLOCKED"].includes(status)) { alert(t("invalidStatus")); return; }
+  try{
+    const res = await fetch(`/api/v1/spots/${spotId}/override`, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({status, operator:"admin", remark:"manual override from dashboard"})
+    });
+    const j = await res.json();
+    if(j.code !== 0) alert(t("failed") + ": " + t(j.message || "requestFailed"));
+    refresh();
+  }catch(e){ alert(t("requestFailed")); }
+}
+
+document.querySelectorAll("[data-lang]").forEach(el => el.addEventListener("click", () => setLanguage(el.dataset.lang)));
+setLanguage(language);
+refresh();
+setInterval(refresh, 3000);
+</script>
+</body>
+</html>

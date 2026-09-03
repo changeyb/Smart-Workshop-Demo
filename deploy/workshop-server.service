@@ -1,0 +1,25 @@
+[Unit]
+Description=Workshop monitoring dashboard
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+StateDirectory=workshop-server
+StateDirectoryMode=0700
+WorkingDirectory=/var/lib/workshop-server
+Environment=WS_ADDR=127.0.0.1:8080
+Environment=WS_DB=/var/lib/workshop-server/workshop.db
+Environment=WS_SNAPSHOT_DIR=/var/lib/workshop-server/snapshots
+Environment=TZ=Asia/Singapore
+ExecStart=/opt/workshop-server/current/workshop-server
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
