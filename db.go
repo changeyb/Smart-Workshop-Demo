@@ -84,14 +84,18 @@ CREATE TABLE IF NOT EXISTS identities (
 `
 
 func seed(db *sql.DB) error {
-	// 车位：A 区 12 个，超时阈值 120 分钟
-	for i := 1; i <= 12; i++ {
+	// 工位：A 区 6 个，超时阈值 120 分钟。
+	for i := 1; i <= 6; i++ {
 		_, err := db.Exec(
 			`INSERT OR IGNORE INTO parking_spots(spot_id, zone, status, target_minutes) VALUES(?,?, 'FREE', 120)`,
 			fmt.Sprintf("A-%02d", i), "A")
 		if err != nil {
 			return err
 		}
+	}
+	// 旧版默认创建了 A-07 至 A-12，升级时仅移除这些默认工位状态，保留事件流水。
+	if _, err := db.Exec(`DELETE FROM parking_spots WHERE spot_id IN ('A-07','A-08','A-09','A-10','A-11','A-12')`); err != nil {
+		return err
 	}
 	// 摄像头登记
 	for _, c := range []string{"CAM_001", "CAM_002", "CAM_003", "CAM_004"} {

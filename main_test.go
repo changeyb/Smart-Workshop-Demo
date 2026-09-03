@@ -41,6 +41,10 @@ func TestRoutesWithoutAuthentication(t *testing.T) {
 	}
 
 	request("GET", "/api/v1/dashboard", "", 0)
+	var spotCount int
+	if err := db.QueryRow("SELECT COUNT(*) FROM parking_spots").Scan(&spotCount); err != nil || spotCount != 6 {
+		t.Fatalf("spot count: %d, %v", spotCount, err)
+	}
 	request("GET", "/api/v1/events", "", 0)
 	request("POST", "/api/v1/heartbeat", `{"device_id":"test","time":"`+nowISO()+`","cameras":[{"camera_id":"CAM_001","status":"ONLINE","fps":12}]}`, 0)
 	event := `[{"event_id":"no-auth-event","event_type":"SPOT_CHANGE","occur_time":"` + nowISO() + `","camera_id":"CAM_001","spot":{"spot_id":"A-01","status":"OCCUPIED"}}]`
